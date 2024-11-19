@@ -35,7 +35,7 @@ Fitur wish list memungkinkan pengguna untuk mengelola daftar produk (restoran) y
 # :link: Tautan Deployment :link:
 Link deployment: http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id
 
-⏫ **Alur Pengintegrasian** ⏫
+# ⏫ **Alur Pengintegrasian** ⏫
 
 Membuat fungsi baru untuk menerima request dari aplikasi mobile menggunakan metode GET dan POST. Pada aplikasi mobile berbasis Flutter, menambahkan request ke URL fungsi tersebut serta memproses data yang diterima dari hasil request. Web service Django akan memberikan respon dalam format JSON. Melakukan debugging dan memperbaiki kesalahan atau masalah yang ditemukan hingga aplikasi berfungsi dengan baik sesuai dengan persyaratan yang diharapkan.
 
