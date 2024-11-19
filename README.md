@@ -13,8 +13,8 @@ ManganJogja hadir untuk membantu penduduk lokal dan wisatawan dalam menemukan ma
 Dengan ManganJogja, pengguna dapat dengan cepat mencari menu makanan atau minuman yang ada di Kota Jogja beserta rekomendasi restoran yang menyajikan menu tersebut. ManganJogja menampilkan beberapa fitur utama yang akan dikembangkan oleh tim, termasuk fitur pencarian, pemesanan tempat, dan ulasan pengguna. Selain itu, admin dapat menambahkan menu makanan atau minuman, serta rekomendasi restoran untuk setiap menu.
 
 # :arrow_forward: Daftar Modul yang Akan Diimplementasikan :arrow_backward:
-## **Dashboard Admin - Ridya** :man_cook:
-Fitur ini merupakan antarmuka utama yang dirancang untuk admin dalam mengelola aplikasi. Melalui fitur ini, admin dapat menambah menu makanan atau minuman, deskripsi menu, serta rekomendasi restoran dari masing-masing menu. Dengan fitur ini, admin dapat memastikan bahwa informasi yang ditampilkan pada aplikasi selalu akurat.
+## **Main Page - Ridya** :computer:
+Page ini merupakan penghubung antara fitur-fitur pada aplikasi ManganJogja. Main page akan menampilkan daftar menu dan rekomendasi restoran di dalamnya, dilengkapi dengan search bar dan filter untuk membantu pencarian menu atau restoran yang sesuai dengan keinginan user
 
 ## **Reserve - Raysha** :book:
 Fitur reserve pada aplikasi Mangan Jogja hanya dapat digunakan oleh pengguna yang telah login (user). Pengguna dapat memesan tempat di restoran pilihan mereka dengan mengisi formulir yang mencakup nama, waktu kedatangan, jumlah tamu, dan detail lainnya. Setelah formulir diisi dan dikirimkan, pengguna akan diarahkan ke halaman terms and conditions yang memiliki tombol reserve. Setelah menyelesaikan proses ini, reservasi restoran berhasil dilakukan. Namun, pengguna tetap memiliki opsi untuk membatalkan pemesanan melalui halaman reserve.
@@ -31,11 +31,11 @@ Fitur wish list memungkinkan pengguna untuk mengelola daftar produk (restoran) y
 # :technologist: Role atau Peran Pengguna :ok_man:
 1. Guest: User yang tidak melakukan login atau tidak memiliki akun. Oleh karena itu, guest hanya bisa melihat homepage tanpa melihat lebih dalam.
 2. User: Pengguna yang telah membuat akun dan login ke dalam aplikasi. User memiliki akses lebih luas dibandingkan guest, seperti memberikan ulasan atau rating terhadap produk makanan dan minuman. User juga dapat berinteraksi dengan modul-modul lain, seperti memanfaatkan fitur pencarian produk dan melihat kategori makanan.
-3. Admin: Admin dapat menginput nama toko beserta atribut yang dimiliki oleh toko tersebut
 
 # :link: Tautan Deployment :link:
 Link deployment: http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id
 
 ⏫ **Alur Pengintegrasian** ⏫
+
 Membuat fungsi baru untuk menerima request dari aplikasi mobile menggunakan metode GET dan POST. Pada aplikasi mobile berbasis Flutter, menambahkan request ke URL fungsi tersebut serta memproses data yang diterima dari hasil request. Web service Django akan memberikan respon dalam format JSON. Melakukan debugging dan memperbaiki kesalahan atau masalah yang ditemukan hingga aplikasi berfungsi dengan baik sesuai dengan persyaratan yang diharapkan.
 
