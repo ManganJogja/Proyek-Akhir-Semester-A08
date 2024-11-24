@@ -1,4 +1,4 @@
-# :earth_asia: :shopping_cart: Proyek-Tengah-Semester-A08
+# :earth_asia: :shopping_cart: Proyek-Akhir-Semester-A08
 
 # :boom: Nama Anggota Kelompok A08 :boom:
 1. Ananda Dwi Hanifa (2306165572)
