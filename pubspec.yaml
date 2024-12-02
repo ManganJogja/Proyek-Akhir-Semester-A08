@@ -30,7 +30,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  carousel_slider: ^4.0.0 # Versi terbaru
     
   google_fonts: ^6.0.0
   intl: ^0.17.0
@@ -42,7 +41,6 @@ dependencies:
   cupertino_icons: ^1.0.8
   provider: ^6.1.2
   pbp_django_auth: ^0.4.0
-  http: ^1.2.2
 
 dev_dependencies:
   flutter_test:
@@ -60,13 +58,13 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
+  assets:
+    - assets/images/
+    - assets/images/no_reservations.png     
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-  assets:
-    - assets/images/
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
@@ -97,3 +95,4 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
