@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:mangan_jogja/reserve/screens/reservepage.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 
 class EditReservationScreen extends StatefulWidget {
@@ -189,6 +190,11 @@ Future<void> _updateReservation(CookieRequest request) async {
                         final request = CookieRequest();
                         _updateReservation(request); // Panggil fungsi untuk update data
                       }
+                      Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ReservedRestaurantsPage()),
+                          );
                     },
                       child: Text('Save Changes'),
                     ),
