@@ -241,14 +241,14 @@ class _StartPageState extends State<StartPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 50),
               Text(
                 'ManganJogja.  © 2024, PBP-A (A08)',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.aBeeZee(
-                  fontSize: 16,
+                  fontSize: 10,
                   fontWeight: FontWeight.w500,
-                  color: const Color.fromARGB(0, 0, 0, 10), // Warna teks sesuai tema
+                  color: const Color(0xFF3E190E), // Warna teks sesuai tema
                 ),
               ),
 

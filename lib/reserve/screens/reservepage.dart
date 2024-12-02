@@ -1,375 +1,301 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+import 'package:mangan_jogja/reserve/models/reserve_entry.dart';
+import 'package:mangan_jogja/reserve/models/resto_entry.dart';
+import 'package:mangan_jogja/reserve/screens/edit_reserve.dart';
 import 'package:mangan_jogja/widgets/drawer.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
 
 class ReservedRestaurantsPage extends StatefulWidget {
+  const ReservedRestaurantsPage({super.key});
+
   @override
-  _ReservedRestaurantsPageState createState() => _ReservedRestaurantsPageState();
+  State<ReservedRestaurantsPage> createState() =>
+      _ReservedRestaurantsPageState();
 }
 
 class _ReservedRestaurantsPageState extends State<ReservedRestaurantsPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final List<Map<String, String>> reservations = [
-    {
-      'restaurantName': 'Gudeg YuDjum',
-      'name': 'tahita',
-      'date': 'Oct 30, 2024',
-      'time': '1:11 p.m',
-      'people': '2 people',
-      'email': 'sdfghj@jkj.com',
-      'phone': '1234567890',
-      'note':''
-    },
-    {
-      'restaurantName': 'Bakmi Jawa Mbah Surip',
-      'name': 'tahita',
-      'date': 'Oct 30, 2024',
-      'time': '1:11 p.m',
-      'people': '2 people',
-      'email': 'sdfghj@jkj.com',
-      'phone': '1234567890',
-      'note':'mau yang adsalkndslkanlkdnklankansknaknknlsuandnwaukrewndukesnlkndalkhidkaem'
-    },
-    {
-      'restaurantName': 'Sate Klathak Pak Pong',
-      'name': 'tahita',
-      'date': 'Oct 31, 2024',
-      'time': '2:00 p.m',
-      'people': '4 people',
-      'email': 'example@domain.com',
-      'phone': '0987654321',
-      'note':'-'
-    },
-  ];
 
-  String? selectedRestaurant;
-  String? selectedDate;
+  String? selectedResto; // Restoran yang dipilih untuk filter
+  List<ReserveEntry> allReserves = []; // Semua data reservasi
+  List<String> restoOptions = []; // Nama restoran unik untuk dropdown filter
 
-  @override
-  Widget build(BuildContext context) {
-    var filteredReservations = reservations.where((reservation) {
-      bool matchesRestaurant = selectedRestaurant == null ||
-          reservation['restaurantName']!
-              .toLowerCase()
-              .contains(selectedRestaurant!.toLowerCase());
-      bool matchesDate = selectedDate == null ||
-          reservation['date']!.contains(selectedDate!);
-      return matchesRestaurant && matchesDate;
-    }).toList();
+  Future<List<ReserveEntry>> fetchReserve(CookieRequest request) async {
+    final response = await request.get('http://127.0.0.1:8000/reserve/json/');
+    final restoResponse = await request.get('http://127.0.0.1:8000/admin-dashboard/json2/');
+    
+    List<RestoEntry> restoList = restoResponse.map<RestoEntry>((d) => RestoEntry.fromJson(d)).toList();
+    Map<String, String> restoMap = {
+      for (var resto in restoList) 
+        resto.pk: resto.fields.namaResto,
+        
+    };
 
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: const Color(0xFFDAC0A3),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60.0),
-        child: ClipRRect(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20.0),
-            bottomRight: Radius.circular(20.0),
-          ),
-          child: AppBar(
-            backgroundColor: const Color(0xFFE7DBC6),
-            title: Text(
-              "ManganJogja.",
-              style: GoogleFonts.aDLaMDisplay(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-                color: const Color(0xFF3E190E),
-                letterSpacing: 1.5,
-              ),
-            ),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.person, color: Color(0xFF3E190E)),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: const Icon(Icons.menu, color: const Color(0xFF3E190E)),
-                onPressed: () {
-                  _scaffoldKey.currentState?.openEndDrawer();
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
-      endDrawer: const LeftDrawer(),
-      body: Container(
-        color: const Color(0xFFDAC0A3),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                width: double.infinity,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                ),
-                child: Text(
-                  'Reserved Restaurants',
-                  style: GoogleFonts.abhayaLibre(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF3E190E),
-                  ),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 16.0), 
-                    child: IconButton(
-                      icon: const Icon(Icons.tune, color: Color(0xFF3E190E)),
-                      onPressed: () {
-                        _showFilterDialog(context);
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              if (filteredReservations.isEmpty) 
-              Column(
-                children: [
-                  Image.asset(
-                    'assets/images/no_reservations.png', 
-                    height: 200,
-                    width: 200,
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'No Reservations Yet!',
-                    style: GoogleFonts.abhayaLibre(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xFF3E190E),
-                    ),
-                  ),
-                ],
-              )
-            else 
-                 Wrap(
-                spacing: 16.0,
-                runSpacing: 16.0,
-                children: [
-                  for (var reservation in filteredReservations)
-                    ReservationCard(
-                      restaurantName: reservation['restaurantName']!,
-                      name: reservation['name']!,
-                      date: reservation['date']!,
-                      time: reservation['time']!,
-                      people: reservation['people']!,
-                      email: reservation['email']!,
-                      phone: reservation['phone']!,
-                      note: reservation['note']!
-                    ),
-                ],
-              ),
-               const SizedBox(height: 50),
-            ],
-          ),
-        ),
-      ),
-    );
+    List<ReserveEntry> listReserve = [];
+    for (var d in response) {
+      if (d != null) {
+        var reserveEntry = ReserveEntry.fromJson(d);
+        // Replace resto ID with resto name
+        reserveEntry.fields.resto = restoMap[reserveEntry.fields.resto] ?? 'Unknown Restaurant';
+        listReserve.add(reserveEntry);
+      }
+    }
+
+    // Ambil nama restoran unik dari reservasi
+    restoOptions = listReserve.map((entry) => entry.fields.resto).toSet().toList();
+    restoOptions.insert(0, "All"); // Tambahkan opsi "All" untuk menampilkan semua
+
+    return listReserve;
   }
 
-void _showFilterDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Center(
-          child: Text(
-            "Filter Reservations", 
-            style: GoogleFonts.abhayaLibre(
-              fontSize: 18,
+  @override
+Widget build(BuildContext context) {
+  final request = context.watch<CookieRequest>();
+
+  return Scaffold(
+    key: _scaffoldKey,
+    backgroundColor: const Color(0xFFF6F6F6),
+    appBar: PreferredSize(
+      preferredSize: const Size.fromHeight(60.0),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(20.0),
+          bottomRight: Radius.circular(20.0),
+        ),
+        child: AppBar(
+          backgroundColor: const Color(0xFFE7DBC6),
+          title: Text(
+            "ManganJogja.",
+            style: GoogleFonts.aDLaMDisplay(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
               color: const Color(0xFF3E190E),
-              fontWeight: FontWeight.bold
+              letterSpacing: 1.5,
             ),
           ),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            DropdownButton<String>(
-              value: selectedRestaurant,
-              hint: Text("Select Restaurant"),
-              onChanged: (value) {
-                setState(() {
-                  selectedRestaurant = value;
-                });
-              },
-              items: ['Gudeg YuDjum', 'Bakmi Jawa Mbah Surip', 'Sate Klathak Pak Pong']
-                  .map<DropdownMenuItem<String>>((restaurant) {
-                return DropdownMenuItem<String>(
-                  value: restaurant,
-                  child: Text(restaurant),
-                );
-              }).toList(),
-            ),
-            const SizedBox(height: 16),
-            DropdownButton<String>(
-              value: selectedDate,
-              hint: Text("Select Date"),
-              onChanged: (value) {
-                setState(() {
-                  selectedDate = value;
-                });
-              },
-              items: ['Oct 30, 2024', 'Oct 31, 2024']
-                  .map<DropdownMenuItem<String>>((date) {
-                return DropdownMenuItem<String>(
-                  value: date,
-                  child: Text(date),
-                );
-              }).toList(),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.person, color: Color(0xFF3E190E)),
+              onPressed: () {},
             ),
           ],
         ),
-        actions: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    selectedRestaurant = null;
-                    selectedDate = null;
-                  });
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  "Clear Filters",
-                  style: GoogleFonts.abhayaLibre(
-                    fontSize: 16,
-                    color: const Color(0xFF3E190E),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(width: 20),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  "Apply",
-                  style: GoogleFonts.abhayaLibre(
-                    fontSize: 16,
-                    color: const Color(0xFF3E190E),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
+      ),
+    ),
+    drawer: const LeftDrawer(),
+    body: Column(
+  crossAxisAlignment: CrossAxisAlignment.center,
+  children: [
+    // Bagian filter di luar AppBar
+    Container(
+      width: double.infinity, // Make the container take the full width
+      padding: const EdgeInsets.symmetric(horizontal: 16.0), // Optional: add padding for aesthetics
+      child: Column(
+        children: [
+          // Center the title
+          const SizedBox(height: 16),
+          Text(
+            "Reserved Restaurants",
+            style: GoogleFonts.abhayaLibre(
+              fontWeight: FontWeight.w700,
+              fontSize: 25,
+              color: const Color(0xFF3E190E),
+            ),
+            textAlign: TextAlign.center, // This centers the title text
+          ),
+          const SizedBox(height: 5), // Space between title and filter icon
+          Align(
+            alignment: Alignment.centerRight, // Align filter icon to the right
+            child: IconButton(
+              onPressed: _showFilterDialog, // Show filter dialog
+              icon: const Icon(Icons.filter_alt, color: Color(0xFF3E190E)),
+              tooltip: "Filter",
+            ),
           ),
         ],
-      );
-    },
+      ),
+    ),
+
+        const SizedBox(height: 10),
+        Expanded(
+          child: FutureBuilder(
+            future: fetchReserve(request),
+            builder: (context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return const Center(
+                  child: Text(
+                    'Error fetching data.',
+                    style: TextStyle(fontSize: 20, color: Color(0xff59A5D8)),
+                  ),
+                );
+              } else if (!snapshot.hasData || snapshot.data.isEmpty) {
+                return const Center(
+                  child: Text(
+                    'No reserved restaurants found.',
+                    style: TextStyle(fontSize: 20, color: Color(0xff59A5D8)),
+                  ),
+                );
+              } else {
+                allReserves = snapshot.data;
+
+                // Filter reservasi berdasarkan restoran yang dipilih
+                List<ReserveEntry> filteredReserves =
+                    selectedResto == null || selectedResto == "All"
+                        ? allReserves
+                        : allReserves
+                            .where((entry) => entry.fields.resto == selectedResto)
+                            .toList();
+
+                return GridView.builder(
+                  padding: const EdgeInsets.all(16.0),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 4 / 5,
+                    crossAxisSpacing: 16.0,
+                    mainAxisSpacing: 16.0,
+                  ),
+                  itemCount: filteredReserves.length,
+                  itemBuilder: (_, index) {
+                    var entry = filteredReserves[index];
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xffE7DBC6),
+                        borderRadius: BorderRadius.circular(12.0),
+                        border: Border.all(
+                            color: const Color(0xFF784B39), width: 1.5),
+                      ),
+                      padding: const EdgeInsets.only(
+      left: 18.0, right: 15.0, top: 20.0, bottom: 1.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF784B39),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: Center(
+                              child: Text(
+                                entry.fields.resto,
+                                style: GoogleFonts.abhayaLibre(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color.fromARGB(
+                                      255, 255, 255, 255),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          InfoRow(icon: Icons.person, text: entry.fields.name),
+                          InfoRow(
+                              icon: Icons.calendar_today,
+                              text: formatDate(entry.fields.date)),
+                          InfoRow(
+                              icon: Icons.access_time,
+                              text: entry.fields.time.toString()),
+                          InfoRow(
+                              icon: Icons.group,
+                              text:
+                                  "${entry.fields.guestQuantity.toString()} people"),
+                          InfoRow(
+                              icon: Icons.email, text: entry.fields.email),
+                          InfoRow(
+                              icon: Icons.phone,
+                              text: entry.fields.phone.toString()),
+                          InfoRow(
+                              icon: Icons.note,
+                              text: entry.fields.notes ?? '-'),
+                          const SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                              onPressed: () async {
+                                // Navigasi ke halaman edit dengan data entry
+                                final updatedReserve = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EditReservationScreen(
+                                      reservationId: entry.pk,
+                                    )
+                                  ),
+                                );
+
+                                if (updatedReserve != null) {
+                                  setState(() {
+                                    // Perbarui data lokal dengan data yang diubah
+                                    int index = allReserves.indexWhere((e) => e.pk == updatedReserve.pk);
+                                    if (index != -1) {
+                                      allReserves[index] = updatedReserve;
+                                    }
+                                  });
+                                }
+                              },
+                              icon: const Icon(Icons.edit, size: 20, color: Color(0xFF3E190E)),
+                            ),
+
+                              IconButton(
+                                onPressed: () {
+                                  // TODO: Tambahkan fungsi delete
+                                },
+                                icon: const Icon(Icons.delete,
+                                    size: 20, color: Color(0xFF3E190E)),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              }
+            },
+          ),
+        ),
+      ],
+    ),
   );
 }
 
-}
-
-class ReservationCard extends StatelessWidget {
-  final String restaurantName;
-  final String name;
-  final String date;
-  final String time;
-  final String people;
-  final String email;
-  final String phone;
-  final String? note;
-  
-
-  const ReservationCard({
-    Key? key,
-    required this.restaurantName,
-    required this.name,
-    required this.date,
-    required this.time,
-    required this.people,
-    required this.email,
-    required this.phone,
-    this.note,
-    
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFFF8F0E5),
-        borderRadius: BorderRadius.circular(8.0),
-        border: Border.all(
-          color: Colors.brown,
-          width: 1.5, 
-        ),
-      ),
-      width: (MediaQuery.of(context).size.width - 48) / 2,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              width: double.infinity,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: const Color(0xFF784B39),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: Text(
-                restaurantName,
-                style: GoogleFonts.abhayaLibre(
-                  color: const Color(0xFFE7DBC6),
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Column(
-              children: [
-                InfoRow(icon: Icons.person, text: name),
-                InfoRow(icon: Icons.calendar_today, text: date),
-                InfoRow(icon: Icons.access_time, text: time),
-                InfoRow(icon: Icons.group, text: people),
-                InfoRow(icon: Icons.email, text: email),
-                InfoRow(icon: Icons.phone, text: phone),
-                InfoRow(icon: Icons.note, text: (note?.isNotEmpty ?? false) ? note! : "-"),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.edit, color: const Color(0xFF3E190E)),
-                  onPressed: () {
-                    // belum selesai
-                    print('Edit $restaurantName');
+  void _showFilterDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Filter by Restaurant'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: restoOptions.map((restoName) {
+                return ListTile(
+                  title: Text(restoName),
+                  onTap: () {
+                    setState(() {
+                      selectedResto = restoName == "All" ? null : restoName;
+                    });
+                    Navigator.pop(context);
                   },
-                ),
-                IconButton(
-                  icon: Icon(Icons.delete, color: const Color(0xFF3E190E)),
-                  onPressed: () {
-                    // belum selesai
-                    print('Delete $restaurantName');
-                  },
-                ),
-              ],
+                );
+              }).toList(),
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
+
+  String formatDate(DateTime date) {
+    return DateFormat('yyyy-MM-dd').format(date);
+  }
 }
+
 
 
 class InfoRow extends StatefulWidget {
@@ -380,61 +306,54 @@ class InfoRow extends StatefulWidget {
       : super(key: key);
 
   @override
-  _InfoRowState createState() => _InfoRowState();
+  State<InfoRow> createState() => _InfoRowState();
 }
 
 class _InfoRowState extends State<InfoRow> {
-  bool isExpanded = false;
+  bool isExpanded = false; // Menyimpan apakah teks diperluas atau tidak
 
   @override
   Widget build(BuildContext context) {
+    // Panjang maksimal sebelum teks dianggap terlalu panjang
+    const maxTextLength = 30;
+
+    // Periksa apakah teks melebihi panjang maksimum
+    bool isTextLong = widget.text.length > maxTextLength;
+
+    // Potong teks jika terlalu panjang dan tidak diperluas
+    String displayText = isExpanded || !isTextLong
+        ? widget.text
+        : "${widget.text.substring(0, maxTextLength)}...";
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(width: 5),
           Icon(widget.icon, size: 18, color: const Color(0xFF3E190E)),
           const SizedBox(width: 15),
           Expanded(
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  isExpanded = !isExpanded;
-                });
-              },
-              child: Text(
-                widget.text,
-                maxLines: isExpanded ? null : 1, 
-                overflow: isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
-                style: GoogleFonts.abhayaLibre(
-                  fontSize: 16,
-                  color: const Color(0xFF3E190E),
-                  fontWeight: FontWeight.bold,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Wrap the text with a SingleChildScrollView to handle long content
+                SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Text(
+                    displayText,
+                    style: GoogleFonts.abhayaLibre(
+                      fontSize: 16,
+                      color: const Color(0xFF3E190E),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-              ),
+                
+              ],
             ),
           ),
-          if (!isExpanded && widget.text.length > 20) 
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  isExpanded = true;
-                });
-              },
-              child: Text(
-                " More",
-                style: GoogleFonts.abhayaLibre(
-                  fontSize: 16,
-                  color: const Color(0xFF3E190E), 
-                  fontWeight: FontWeight.bold,
-                  decoration: TextDecoration.underline,
-                ),
-              ),
-            ),
         ],
       ),
     );
   }
 }
-
