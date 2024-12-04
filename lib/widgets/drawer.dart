@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mangan_jogja/main/screens/list_menuentry.dart';
+import 'package:mangan_jogja/main/screens/list_restoentry.dart';
 import 'package:mangan_jogja/menu.dart';
 import 'package:mangan_jogja/reserve/screens/reservation_form.dart';
 import 'package:mangan_jogja/reserve/screens/reservepage.dart';
@@ -14,85 +16,85 @@ class LeftDrawer extends StatelessWidget {
       child: ListView(
         children: [
           DrawerHeader(
-            decoration: const BoxDecoration(
-              color: Color(0xFFDAC0A3),
+            decoration: BoxDecoration(
+            color: const Color(0xFFDAC0A3),
+          ),
+          
+          child: Row(
+          children: [
+            Image.asset(
+              'assets/images/Logo.png', 
+              height: 40.0, 
             ),
-            child: Row(
-              children: [
-                Image.asset(
-                  'assets/images/Logo.png', 
-                  height: 40.0, 
-                ),
-                const SizedBox(width: 8.0), 
-                Text(
-                  "ManganJogja.",
-                  style: GoogleFonts.aDLaMDisplay(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: const Color(0xFF3E190E),
-                    letterSpacing: 1.5,
-                  ),
-                ),
-              ],
+            const SizedBox(width: 8.0), 
+            Text(
+              "ManganJogja.",
+              style: GoogleFonts.aDLaMDisplay(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: const Color(0xFF3E190E),
+                letterSpacing: 1.5,
+              ),
             ),
-          ),
-          
-          // Menu Home
-          ListTile(
-            leading: const Icon(Icons.home_outlined),
-            title: const Text('Home'),
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MyHomePage(),
-                ),
+          ],
+        ),
+        ),
+              
+            ListTile(
+              leading: const Icon(Icons.home_outlined),
+              title: const Text('Home'),
+              onTap: () {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MyHomePage(),
+                    ));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.add),
+              title: const Text('Tambah Reserve'), // Ini nanti jadi ada reserve ajaa
+              onTap: () {
+                Navigator.pushReplacement(
+                  context, 
+                  MaterialPageRoute(
+                    builder: (context) => const ReservationPageForm()),
               );
-            },
-          ),
-          
-          // Menu Tambah Reserve
-          ListTile(
-            leading: const Icon(Icons.add),
-            title: const Text('Tambah Reserve'),
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ReservationPageForm(),
-                ),
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.add),
+              title: const Text('Lihat Reserve'),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context, 
+                  MaterialPageRoute(
+                    builder: (context) => ReservedRestaurantsPage()),
               );
-            },
-          ),
-          
-          // Menu Lihat Reserve
-          ListTile(
-            leading: const Icon(Icons.add),
-            title: const Text('Lihat Reserve'),
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ReservedRestaurantsPage(),
-                ),
-              );
-            },
-          ),
-          
-          // Menu Review (Button baru untuk menuju halaman Review)
-          ListTile(
-            leading: const Icon(Icons.rate_review),
-            title: const Text('My Reviews'),
-            onTap: () {
-              // Menavigasi ke halaman Review
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ReviewPage(restaurantName: 'Gudeg Yudjum',),  // Pastikan ReviewPage adalah widget yang ada
-                ),
-              );
-            },
-          ),
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.menu_book),
+              title: const Text('Daftar Menu'),
+              onTap: () {
+                  // Route menu ke halaman mood
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const MenuEntryPage()),
+                  );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.restaurant),
+              title: const Text('Daftar Resto'),
+              onTap: () {
+                  // Route menu ke halaman mood
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const RestoEntryPage()),
+                  );
+              },
+            ),
         ],
       ),
     );
