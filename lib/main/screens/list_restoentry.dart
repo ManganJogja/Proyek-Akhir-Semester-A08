@@ -73,61 +73,82 @@ class RestoCard extends StatelessWidget {
     return Card(
       elevation: 4,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              restoEntry.fields.namaResto,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text('Location: ${restoEntry.fields.lokasiResto}'),
-            const SizedBox(height: 8),
-            Text('Rating: ${restoEntry.fields.rating} ⭐'),
-            const SizedBox(height: 8),
-            Text('Range Harga: Rp ${restoEntry.fields.rangeHarga}'),
-            const SizedBox(height: 8),
-            Text('Cuisine: ${restoEntry.fields.jenisKuliner}'),
-            const SizedBox(height: 8),
-            Text('Tingkat Keramaian Resto: ${restoEntry.fields.keramaianResto}'),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    // Add navigation logic for "Make Reservation" here
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF4E342E),
-                  ),
-                  child: const Text('Make Reservation'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    // Add navigation logic for "Click to see reviews" here
-                  },
-                  child: const Text(
-                    'Click to see reviews',
-                    style: TextStyle(color: Colors.brown),
+                // Informasi Restoran
+                Text(
+                  restoEntry.fields.namaResto,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                IconButton(
-                  onPressed: () {
-                    // Add wishlist toggle logic here
-                  },
-                  icon: const Icon(Icons.favorite_border),
-                  color: Colors.brown,
+                const SizedBox(height: 8),
+                Text('Location: ${restoEntry.fields.lokasiResto}'),
+                const SizedBox(height: 8),
+                Text('Rating: ${restoEntry.fields.rating} ⭐'),
+                const SizedBox(height: 8),
+                Text('Range Harga: Rp ${restoEntry.fields.rangeHarga}'),
+                const SizedBox(height: 8),
+                Text('Cuisine: ${restoEntry.fields.jenisKuliner}'),
+                const SizedBox(height: 8),
+                Text('Tingkat Keramaian Resto: ${restoEntry.fields.keramaianResto}'),
+
+                const SizedBox(height: 16),
+
+                // Tombol Aksi
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Tombol "Click to see reviews" di kiri
+                    TextButton(
+                      onPressed: () {
+                        // Tambahkan logika untuk tombol "Click to see reviews" di sini
+                      },
+                      child: const Text(
+                        'Click to see reviews',
+                        style: TextStyle(
+                          color: Colors.brown,
+                          decoration: TextDecoration.underline, // Garis bawah
+                        ),
+                      ),
+                    ),
+
+                    // Tombol "Make Reservation" di kanan
+                    ElevatedButton(
+                      onPressed: () {
+                        // Tambahkan logika untuk tombol "Make Reservation" di sini
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF4E342E), // Warna cokelat gelap
+                        foregroundColor: Colors.white, // Warna teks putih
+                      ),
+                      child: const Text('Make Reservation'),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+
+          // Wishlist IconButton di kanan atas
+          Positioned(
+            top: 8,
+            right: 8,
+            child: IconButton(
+              onPressed: () {
+                // Tambahkan logika untuk toggle wishlist di sini
+              },
+              icon: const Icon(Icons.favorite_border),
+              color: Colors.brown,
+            ),
+          ),
+        ],
       ),
     );
   }
