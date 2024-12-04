@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mangan_jogja/main/screens/list_menuentry.dart';
+import 'package:mangan_jogja/main/screens/list_restoentry.dart';
 import 'package:mangan_jogja/menu.dart';
 import 'package:mangan_jogja/reserve/screens/reservation_form.dart';
 import 'package:mangan_jogja/reserve/screens/reservepage.dart';
@@ -68,6 +70,28 @@ class LeftDrawer extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) => ReservedRestaurantsPage()),
               );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.menu_book),
+              title: const Text('Daftar Menu'),
+              onTap: () {
+                  // Route menu ke halaman mood
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const MenuEntryPage()),
+                  );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.restaurant),
+              title: const Text('Daftar Resto'),
+              onTap: () {
+                  // Route menu ke halaman mood
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const RestoEntryPage()),
+                  );
               },
             ),
         ],
