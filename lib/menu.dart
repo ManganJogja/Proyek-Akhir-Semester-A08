@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mangan_jogja/reserve/screens/reservepage.dart';
 import 'package:mangan_jogja/widgets/bottom_navbar.dart'; 
 import 'package:mangan_jogja/reserve/screens/product_card.dart';
 import 'package:mangan_jogja/widgets/drawer.dart'; // Import LeftDrawer
@@ -35,7 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<Widget> _pages = [
     const MyHomePage(), // Ganti dengan halaman sesuai
     // const WishlistPage(),
-    // const ReservationPage(),
+    const ReservedRestaurantsPage(),
     // const OrdersPage(),
   ];
 

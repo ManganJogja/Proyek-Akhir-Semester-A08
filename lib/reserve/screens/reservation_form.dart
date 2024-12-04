@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -39,8 +38,9 @@ class _ReservationPageState extends State<ReservationPageForm> {
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
     return Scaffold(
-      backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFFF6F6F6),
       appBar: AppBar(
+        automaticallyImplyLeading: true,
         backgroundColor: const Color(0xFFE7DBC6),
         title: Text(
           "Gudeg Yudjum",
@@ -60,6 +60,7 @@ class _ReservationPageState extends State<ReservationPageForm> {
           : Padding(
               padding: const EdgeInsets.all(20.0),
               child: Form(
+                
                 key: _formKey,
                 child: ListView(
                   children: [
@@ -139,7 +140,7 @@ class _ReservationPageState extends State<ReservationPageForm> {
                                     content: Text("Reservation created successfully!"),
                                   ),
                                 );
-                                Navigator.pop(context); // Kembali ke halaman sebelumnya
+                                Navigator.pop(context); 
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(

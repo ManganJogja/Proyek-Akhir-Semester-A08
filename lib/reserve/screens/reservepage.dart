@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -19,9 +20,9 @@ class ReservedRestaurantsPage extends StatefulWidget {
 class _ReservedRestaurantsPageState extends State<ReservedRestaurantsPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  String? selectedResto; // Restoran yang dipilih untuk filter
-  List<ReserveEntry> allReserves = []; // Semua data reservasi
-  List<String> restoOptions = []; // Nama restoran unik untuk dropdown filter
+  String? selectedResto; 
+  List<ReserveEntry> allReserves = [];
+  List<String> restoOptions = []; 
 
   Future<List<ReserveEntry>> fetchReserve(CookieRequest request) async {
     final response = await request.get('http://127.0.0.1:8000/reserve/json/');
@@ -66,6 +67,7 @@ Widget build(BuildContext context) {
           bottomRight: Radius.circular(20.0),
         ),
         child: AppBar(
+          automaticallyImplyLeading: true,
           backgroundColor: const Color(0xFFE7DBC6),
           title: Text(
             "ManganJogja.",
@@ -89,10 +91,9 @@ Widget build(BuildContext context) {
     body: Column(
   crossAxisAlignment: CrossAxisAlignment.center,
   children: [
-    // Bagian filter di luar AppBar
     Container(
-      width: double.infinity, // Make the container take the full width
-      padding: const EdgeInsets.symmetric(horizontal: 16.0), // Optional: add padding for aesthetics
+      width: double.infinity, 
+      padding: const EdgeInsets.symmetric(horizontal: 16.0), 
       child: Column(
         children: [
           // Center the title
@@ -104,13 +105,13 @@ Widget build(BuildContext context) {
               fontSize: 25,
               color: const Color(0xFF3E190E),
             ),
-            textAlign: TextAlign.center, // This centers the title text
+            textAlign: TextAlign.center, 
           ),
-          const SizedBox(height: 5), // Space between title and filter icon
+          const SizedBox(height: 5), 
           Align(
-            alignment: Alignment.centerRight, // Align filter icon to the right
+            alignment: Alignment.centerRight, 
             child: IconButton(
-              onPressed: _showFilterDialog, // Show filter dialog
+              onPressed: _showFilterDialog, 
               icon: const Icon(Icons.filter_alt, color: Color(0xFF3E190E)),
               tooltip: "Filter",
             ),
@@ -170,7 +171,7 @@ Widget build(BuildContext context) {
                             color: const Color(0xFF784B39), width: 1.5),
                       ),
                       padding: const EdgeInsets.only(
-      left: 18.0, right: 15.0, top: 20.0, bottom: 1.0),
+                        left: 18.0, right: 15.0, top: 20.0, bottom: 1.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -240,13 +241,42 @@ Widget build(BuildContext context) {
                               },
                               icon: const Icon(Icons.edit, size: 20, color: Color(0xFF3E190E)),
                             ),
-
                               IconButton(
-                                onPressed: () {
-                                  // TODO: Tambahkan fungsi delete
+                                onPressed: () async {
+                                  final request = context.read<CookieRequest>();
+                                  try {
+                                    final response = await request.postJson(
+                                    "http://127.0.0.1:8000/reserve/delete-flutter/",
+                                    jsonEncode(<String, String>{
+                                      'pk': entry.pk.toString(),
+                                    })
+                              );
+
+                              // Check if deletion was successful
+                              if (response['status'] == 'success') {
+                                // Remove the entry from the local list
+                                setState(() {
+                                  allReserves.removeWhere((e) => e.pk == entry.pk);
+                                });
+
+                                // Optional: Show a success snackbar
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('Reservation deleted successfully')),
+                                );
+                              } else {
+                                // Show error message if deletion failed
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(response['message'] ?? 'Failed to delete reservation')),
+                                );
+                              }
+                                  } catch (e) {
+                                    // Handle any network or server errors
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text('Error: ${e.toString()}')),
+                                    );
+                                  }
                                 },
-                                icon: const Icon(Icons.delete,
-                                    size: 20, color: Color(0xFF3E190E)),
+                                icon: const Icon(Icons.delete, size: 20, color: Color(0xFF3E190E)),
                               ),
                             ],
                           ),
@@ -310,17 +340,13 @@ class InfoRow extends StatefulWidget {
 }
 
 class _InfoRowState extends State<InfoRow> {
-  bool isExpanded = false; // Menyimpan apakah teks diperluas atau tidak
+  bool isExpanded = false; 
 
   @override
   Widget build(BuildContext context) {
-    // Panjang maksimal sebelum teks dianggap terlalu panjang
     const maxTextLength = 30;
-
-    // Periksa apakah teks melebihi panjang maksimum
     bool isTextLong = widget.text.length > maxTextLength;
 
-    // Potong teks jika terlalu panjang dan tidak diperluas
     String displayText = isExpanded || !isTextLong
         ? widget.text
         : "${widget.text.substring(0, maxTextLength)}...";
@@ -336,7 +362,6 @@ class _InfoRowState extends State<InfoRow> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Wrap the text with a SingleChildScrollView to handle long content
                 SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   child: Text(

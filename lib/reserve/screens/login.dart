@@ -2,7 +2,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mangan_jogja/menu.dart';
 import 'package:mangan_jogja/reserve/screens/register.dart';
 import 'package:flutter/material.dart';
-import 'package:mangan_jogja/widgets/drawer.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
@@ -82,21 +81,10 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 16.0),
-                child: IconButton(
-                  icon: const Icon(Icons.menu, color: Color(0xFF3E190E)),
-                  onPressed: () {
-                    _scaffoldKey.currentState?.openEndDrawer();
-                  },
-                ),
-              ),
-            ],
+            
           ),
         ),
       ),
-      endDrawer: const LeftDrawer(),
       body: Center(
         child: SingleChildScrollView(
           child: Form(

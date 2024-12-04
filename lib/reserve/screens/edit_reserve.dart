@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:mangan_jogja/reserve/screens/reservepage.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -96,19 +95,13 @@ Future<void> _updateReservation(CookieRequest request) async {
   };
 
   try {
-    print('Sending data: $postData');
-    print('Reservation ID: ${widget.reservationId}');
-
     final response = await request.post(
       'http://127.0.0.1:8000/reserve/edit-flutter/${widget.reservationId}/',
-      jsonEncode(postData),  // Use jsonEncode to send JSON
+      jsonEncode(postData),  
       
     );
 
-    // Rest of the code remains the same...
   } catch (e, stackTrace) {
-    // Error handling...
-  } finally {
     setState(() {
       _isLoading = false;
     });
@@ -117,97 +110,112 @@ Future<void> _updateReservation(CookieRequest request) async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Edit Reservation')),
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Form(
-                key: _formKey,
-                child: ListView(
-                  children: [
-                    TextFormField(
-                      controller: _nameController,
-                      decoration: InputDecoration(labelText: 'Name'),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) return 'Name is required';
-                        return null;
-                      },
-                    ),
-                    TextFormField(
-                      controller: _dateController,
-                      decoration: InputDecoration(labelText: 'Date (YYYY-MM-DD)'),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) return 'Date is required';
-                        return null;
-                      },
-                    ),
-                    TextFormField(
-                      controller: _timeController,
-                      decoration: InputDecoration(labelText: 'Time (HH:MM:SS)'),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) return 'Time is required';
-                        return null;
-                      },
-                    ),
-                    TextFormField(
-                      controller: _guestQuantityController,
-                      decoration: InputDecoration(labelText: 'Guest Quantity'),
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (value == null || int.tryParse(value) == null) return 'Enter a valid number';
-                        return null;
-                      },
-                    ),
-                    TextFormField(
-                      controller: _emailController,
-                      decoration: InputDecoration(labelText: 'Email'),
-                      validator: (value) {
-                        if (value == null || value.isEmpty || !value.contains('@'))
-                          return 'Enter a valid email';
-                        return null;
-                      },
-                    ),
-                    TextFormField(
-                      controller: _phoneController,
-                      decoration: InputDecoration(labelText: 'Phone'),
-                      keyboardType: TextInputType.phone,
-                      validator: (value) {
-                        if (value == null || value.isEmpty || int.tryParse(value) == null)
-                          return 'Enter a valid phone number';
-                        return null;
-                      },
-                    ),
-                    TextFormField(
-                      controller: _notesController,
-                      decoration: InputDecoration(labelText: 'Notes'),
-                      maxLines: 3,
-                    ),
-                    SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        final request = CookieRequest();
-                        _updateReservation(request); // Panggil fungsi untuk update data
-                      }
-                      Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ReservedRestaurantsPage()),
-                          );
-                    },
-                      child: Text('Save Changes'),
-                    ),
-                  ],
+      backgroundColor: const Color(0xFFF6F6F6),
+      appBar: AppBar(
+        title: Text('Edit Reservation'),
+        automaticallyImplyLeading: true,),
+      body: SingleChildScrollView(
+    child:Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+              child: Text(
+                "EDIT RESERVATION",
+                textAlign: TextAlign.center,
+                style: GoogleFonts.abhayaLibre(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w600,
+                  color: const Color(0xFF3E190E),
                 ),
               ),
-            ),
+              ),
+              const SizedBox(height: 20),
+              ReservationField(
+                controller: _nameController,
+                label: "Name",
+              ),
+              ReservationField(
+                controller: _dateController,
+                label: "Date",
+                isDate: true,
+              ),
+              ReservationField(
+                controller: _timeController,
+                label: "Time",
+                isTime: true,
+              ),
+              ReservationField(
+                controller: _guestQuantityController,
+                label: "Guest quantity",
+              ),
+              ReservationField(
+                controller: _emailController,
+                label: "Email",
+              ),
+              ReservationField(
+                controller: _phoneController,
+                label: "Phone",
+              ),
+              ReservationField(
+                controller: _notesController,
+                label: "Notes",
+                isOptional: true,
+              ),
+              const SizedBox(height: 24),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      final request = CookieRequest();
+                      _updateReservation(request);
+                    }
+                  Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ReservedRestaurantsPage()),
+                            );
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF3E190E),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                        ).copyWith(
+                          overlayColor: MaterialStateProperty.resolveWith<Color>((states) {
+                            if (states.contains(MaterialState.hovered)) {
+                              return const Color(0xFFDAC0A3).withOpacity(0.2); // Hover overlay color
+                            }
+                            if (states.contains(MaterialState.pressed)) {
+                              return const Color(0xFFDAC0A3).withOpacity(0.4); // Pressed state color
+                            }
+                            return Colors.transparent;
+                          }),
+                        ),
+                  child: Text(
+                    'Save Changes',
+                    style: GoogleFonts.abhayaLibre(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: const Color(0xFFDAC0A3),
+                  ),
+                ),
+              ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      ),
     );
   }
+
 }
-
-
-
 
 class ReservationField extends StatelessWidget {
   final TextEditingController controller;
@@ -276,12 +284,11 @@ class ReservationField extends StatelessWidget {
                 borderSide: const BorderSide(
                   color: Color(0xFFAD8262),
                   width: 2.0,
-                ),
               ),
             ),
-            onSaved: onSaved,
-            validator: (value) {
-              if (!isOptional && (value == null || value.isEmpty)) {
+          ),
+          validator: (value) {
+            if (!isOptional && (value == null || value.isEmpty)) {
                 return '$label cannot be empty';
               }
               if (label == "Email" &&
@@ -298,6 +305,7 @@ class ReservationField extends StatelessWidget {
               return null;
             },
           ),
+
         ],
       ),
     );
