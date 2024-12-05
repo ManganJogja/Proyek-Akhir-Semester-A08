@@ -50,17 +50,7 @@ class LeftDrawer extends StatelessWidget {
                     ));
               },
             ),
-            ListTile(
-              leading: const Icon(Icons.add),
-              title: const Text('Tambah Reserve'), // Ini nanti jadi ada reserve ajaa
-              onTap: () {
-                Navigator.pushReplacement(
-                  context, 
-                  MaterialPageRoute(
-                    builder: (context) => const ReservationPageForm()),
-              );
-              },
-            ),
+            
             ListTile(
               leading: const Icon(Icons.add),
               title: const Text('Lihat Reserve'),

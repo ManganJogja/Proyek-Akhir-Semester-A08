@@ -28,14 +28,8 @@ class ItemCard extends StatelessWidget {
             ..showSnackBar(
               SnackBar(content: Text("Kamu telah menekan tombol ${item.name}!"))
             );
-            if (item.name == "Tambah Produk") {
-              Navigator.pushReplacement(
-                  context, 
-                  MaterialPageRoute(
-                    builder: (context) => const ReservationPageForm()),
-              );
-            }
-            else if (item.name == "Lihat Daftar Produk") {
+           
+             if (item.name == "Lihat Daftar Produk") {
               Navigator.pushReplacement(
                   context, 
                   MaterialPageRoute(

@@ -2,11 +2,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:mangan_jogja/reserve/screens/reservepage.dart';
 import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 
 class ReservationPageForm extends StatefulWidget {
-  const ReservationPageForm({Key? key}) : super(key: key);
+  final String restoId; // Add this line
+
+  const ReservationPageForm({Key? key, required this.restoId}) : super(key: key);
 
   @override
   State<ReservationPageForm> createState() => _ReservationPageState();
@@ -122,7 +125,7 @@ class _ReservationPageState extends State<ReservationPageForm> {
                             setState(() => _isLoading = true);
                             try {
                               final response = await request.postJson(
-                                "http://127.0.0.1:8000/reserve/reserve-flutter/",
+                                "http://127.0.0.1:8000/reserve/reserve-flutter/${widget.restoId}/",
                                 jsonEncode({
                                   'name': _name,
                                   'date': _date,
@@ -140,8 +143,13 @@ class _ReservationPageState extends State<ReservationPageForm> {
                                     content: Text("Reservation created successfully!"),
                                   ),
                                 );
-                                Navigator.pop(context); 
-                              } else {
+                                  Navigator.push(
+                                    context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const ReservedRestaurantsPage(), // Halaman tujuan
+                                      ),
+                                    );   
+                                   } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(response['message'] ?? "An error occurred"),
@@ -249,7 +257,10 @@ class ReservationField extends StatelessWidget {
                   initialTime: TimeOfDay.now(),
                 );
                 if (selectedTime != null) {
-                  controller.text = selectedTime.format(context);
+                  // Format waktu menjadi HH:mm
+                  final formattedTime =
+                      '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}';
+                  controller.text = formattedTime;
                 }
               }
             },
