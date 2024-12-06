@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 List<Wishlist> wishlistFromJson(String str) => List<Wishlist>.from(json.decode(str).map((x) => Wishlist.fromJson(x)));
@@ -55,4 +54,16 @@ class Fields {
         "date_plan": "${datePlan!.year.toString().padLeft(4, '0')}-${datePlan!.month.toString().padLeft(2, '0')}-${datePlan!.day.toString().padLeft(2, '0')}",
         "additional_note": additionalNote,
     };
+}
+
+class WishlistEntry {
+    String namaResto;
+    String rating;
+    int rangeHarga;
+
+    WishlistEntry({
+        required this.namaResto,
+        required this.rating,
+        required this.rangeHarga,
+    });
 }

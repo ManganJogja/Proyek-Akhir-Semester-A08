@@ -3,6 +3,8 @@ import 'package:mangan_jogja/models/resto_entry.dart';
 import 'package:mangan_jogja/widgets/drawer.dart';
 import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:mangan_jogja/wishlist/models/wishlist_entry.dart'; // Import WishlistEntry
+import 'package:mangan_jogja/wishlist/providers/wishlist_provider.dart'; // Import WishlistProvider
 
 class RestoEntryPage extends StatefulWidget {
   const RestoEntryPage({super.key});
@@ -70,6 +72,8 @@ class RestoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final wishlistProvider = Provider.of<WishlistProvider>(context); // Ambil instance WishlistProvider
+
     return Card(
       elevation: 4,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -142,10 +146,27 @@ class RestoCard extends StatelessWidget {
             right: 8,
             child: IconButton(
               onPressed: () {
-                // Tambahkan logika untuk toggle wishlist di sini
+                final wishlistEntry = WishlistEntry(
+                  namaResto: restoEntry.fields.namaResto,
+                  rating: restoEntry.fields.rating,
+                  rangeHarga: restoEntry.fields.rangeHarga,
+                );
+
+                // Tambahkan atau hapus dari wishlist
+                if (wishlistProvider.isInWishlist(wishlistEntry)) {
+                  wishlistProvider.removeFromWishlist(wishlistEntry);
+                } else {
+                  wishlistProvider.addToWishlist(wishlistEntry);
+                }
               },
-              icon: const Icon(Icons.favorite_border),
-              color: Colors.brown,
+              icon: Icon(
+                wishlistProvider.isInWishlist(WishlistEntry(
+                  namaResto: restoEntry.fields.namaResto,
+                  rating: restoEntry.fields.rating,
+                  rangeHarga: restoEntry.fields.rangeHarga,
+                )) ? Icons.favorite : Icons.favorite_border,
+                color: Colors.brown,
+              ),
             ),
           ),
         ],
