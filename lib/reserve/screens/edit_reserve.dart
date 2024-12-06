@@ -44,7 +44,7 @@ Future<void> _fetchReservationDetails(CookieRequest request) async {
     final dynamic data = await request.get(
       'http://127.0.0.1:8000/reserve/json/${widget.reservationId}/',
     );
-
+    print(data);
     // Django returns a list with one item, so we need to access the first item's fields
     if (data != null && data is List && data.isNotEmpty) {
       final fields = data[0]['fields'] ?? {};
@@ -100,9 +100,11 @@ Future<void> _updateReservation(CookieRequest request) async {
       jsonEncode(postData),  
       
     );
+  print('Response: ${response.statusCode}, ${response.body}');
 
   } catch (e, stackTrace) {
     setState(() {
+      print('Error: $e');
       _isLoading = false;
     });
   }
