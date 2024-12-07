@@ -6,7 +6,7 @@ String wishlistToJson(List<Wishlist> data) => json.encode(List<dynamic>.from(dat
 
 class Wishlist {
     String model;
-    int pk;
+    String pk;
     Fields fields;
 
     Wishlist({
@@ -17,7 +17,7 @@ class Wishlist {
 
     factory Wishlist.fromJson(Map<String, dynamic> json) => Wishlist(
         model: json["model"],
-        pk: json["pk"],
+        pk: json["pk"].toString(),
         fields: Fields.fromJson(json["fields"]),
     );
 
@@ -33,26 +33,42 @@ class Fields {
     String restaurant;
     DateTime? datePlan;
     String additionalNote;
+    String namaResto;
+    String rating;
+    int rangeHarga;
+    String alamat;
 
     Fields({
         required this.user,
         required this.restaurant,
-        required this.datePlan,
+        this.datePlan,
         required this.additionalNote,
+        required this.namaResto,
+        required this.rating,
+        required this.rangeHarga,
+        required this.alamat,
     });
 
     factory Fields.fromJson(Map<String, dynamic> json) => Fields(
         user: json["user"],
         restaurant: json["restaurant"],
         datePlan: json["date_plan"] == null ? null : DateTime.parse(json["date_plan"]),
-        additionalNote: json["additional_note"],
+        additionalNote: json["additional_note"] ?? "",
+        namaResto: json["nama_resto"],
+        rating: json["rating"],
+        rangeHarga: json["range_harga"],
+        alamat: json["alamat"],
     );
 
     Map<String, dynamic> toJson() => {
         "user": user,
         "restaurant": restaurant,
-        "date_plan": "${datePlan!.year.toString().padLeft(4, '0')}-${datePlan!.month.toString().padLeft(2, '0')}-${datePlan!.day.toString().padLeft(2, '0')}",
+        "date_plan": datePlan?.toIso8601String(),
         "additional_note": additionalNote,
+        "nama_resto": namaResto,
+        "rating": rating,
+        "range_harga": rangeHarga,
+        "alamat": alamat,
     };
 }
 

@@ -1,22 +1,69 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import '../models/wishlist_entry.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
 
-class WishlistProvider with ChangeNotifier {
-  List<WishlistEntry> _wishlist = [];
-
-  List<WishlistEntry> get wishlist => _wishlist;
-
-  void addToWishlist(WishlistEntry entry) {
-    _wishlist.add(entry);
-    notifyListeners();
+class WishlistProvider extends ChangeNotifier {
+  List<Wishlist> _wishlist = [];
+  List<Wishlist> get wishlist => _wishlist;
+  
+  Future<void> fetchWishlist(CookieRequest request) async {
+    try {
+      final response = await request.get('http://127.0.0.1:8000/wishlist/json/');
+      if (response is List) {
+        _wishlist = wishlistFromJson(jsonEncode(response));
+        notifyListeners();
+      } else {
+        print('Error: Invalid response format');
+        _wishlist = [];
+        notifyListeners();
+      }
+    } catch (e) {
+      print('Error fetching wishlist: $e');
+      _wishlist = [];
+      notifyListeners();
+    }
   }
 
-  void removeFromWishlist(WishlistEntry entry) {
-    _wishlist.remove(entry);
-    notifyListeners();
+  Future<bool> toggleWishlist(CookieRequest request, String restaurantId) async {
+    try {
+      final response = await request.post(
+        'http://127.0.0.1:8000/wishlist/toggle/$restaurantId/',
+        {},
+      );
+      
+      if (response is Map && response.containsKey('added')) {
+        await fetchWishlist(request);
+        return response['added'] as bool;
+      }
+      return false;
+    } catch (e) {
+      print('Error toggling wishlist: $e');
+      return false;
+    }
   }
 
-  bool isInWishlist(WishlistEntry entry) {
-    return _wishlist.contains(entry);
+  Future<bool> addWishlistWithPlan(CookieRequest request, String restaurantId, DateTime datePlan, String additionalNote) async {
+    try {
+      final response = await request.post(
+        'http://127.0.0.1:8000/wishlist/add/$restaurantId/',
+        {
+          'date_plan': datePlan.toIso8601String(),
+          'additional_note': additionalNote,
+        },
+      );
+      
+      if (response is Map && response.containsKey('success')) {
+        if (response['success'] == true) {
+          await fetchWishlist(request);
+          return true;
+        }
+      }
+      return false;
+    } catch (e) {
+      print('Error adding wishlist plan: $e');
+      return false;
+    }
   }
 }

@@ -3,9 +3,17 @@ import 'package:mangan_jogja/wishlist/models/wishlist_entry.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import '../providers/wishlist_provider.dart';
 
 class AddWishlistPage extends StatefulWidget {
-  const AddWishlistPage({super.key});
+  final String restaurantId;
+
+  const AddWishlistPage({
+    super.key,
+    required this.restaurantId,
+  });
 
   @override
   State<AddWishlistPage> createState() => _AddWishlistPageState();
@@ -32,6 +40,9 @@ class _AddWishlistPageState extends State<AddWishlistPage> {
 
   @override
   Widget build(BuildContext context) {
+    final wishlistProvider = Provider.of<WishlistProvider>(context);
+    final request = context.watch<CookieRequest>();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -83,10 +94,31 @@ class _AddWishlistPageState extends State<AddWishlistPage> {
               ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate() && _datePlan != null) {
-                    // Implement your add wishlist logic here
-                    // You'll need to make HTTP POST request to your Django backend
-                    
-                    Navigator.pop(context);
+                    final success = await wishlistProvider.addWishlistWithPlan(
+                      request,
+                      widget.restaurantId,
+                      _datePlan!,
+                      _additionalNote,
+                    );
+
+                    if (success) {
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Successfully added to wishlist!'),
+                          ),
+                        );
+                        Navigator.pop(context);
+                      }
+                    } else {
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Failed to add to wishlist'),
+                          ),
+                        );
+                      }
+                    }
                   }
                 },
                 child: const Text("Add Wishlist"),

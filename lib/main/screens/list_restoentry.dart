@@ -145,26 +145,27 @@ class RestoCard extends StatelessWidget {
             top: 8,
             right: 8,
             child: IconButton(
-              onPressed: () {
-                final wishlistEntry = WishlistEntry(
-                  namaResto: restoEntry.fields.namaResto,
-                  rating: restoEntry.fields.rating,
-                  rangeHarga: restoEntry.fields.rangeHarga,
+              onPressed: () async {
+                final request = context.read<CookieRequest>();
+                final added = await wishlistProvider.toggleWishlist(
+                  request,
+                  restoEntry.pk,
                 );
-
-                // Tambahkan atau hapus dari wishlist
-                if (wishlistProvider.isInWishlist(wishlistEntry)) {
-                  wishlistProvider.removeFromWishlist(wishlistEntry);
-                } else {
-                  wishlistProvider.addToWishlist(wishlistEntry);
-                }
+                
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      added ? 'Added to wishlist' : 'Removed from wishlist'
+                    ),
+                    duration: const Duration(seconds: 2),
+                  ),
+                );
               },
               icon: Icon(
-                wishlistProvider.isInWishlist(WishlistEntry(
-                  namaResto: restoEntry.fields.namaResto,
-                  rating: restoEntry.fields.rating,
-                  rangeHarga: restoEntry.fields.rangeHarga,
-                )) ? Icons.favorite : Icons.favorite_border,
+                wishlistProvider.wishlist.any((item) => 
+                  item.fields.restaurant == restoEntry.pk)
+                    ? Icons.favorite
+                    : Icons.favorite_border,
                 color: Colors.brown,
               ),
             ),
