@@ -33,6 +33,7 @@ class _MenuEntryPageState extends State<MenuEntryPage> {
   @override
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
+    final token = request.cookies['csrftoken'];
     return Scaffold(
       appBar: AppBar(
         title: const Text('All Menus'),
@@ -76,6 +77,9 @@ class _MenuEntryPageState extends State<MenuEntryPage> {
                       Text("${snapshot.data![index].fields.imageUrl}"),
                       Image.network(
                         snapshot.data![index].fields.imageUrl,
+                        headers: {
+                          "Authorization": "Token $token",
+                        },
                         height: 200, // Atur tinggi gambar
                         width: 200,
                         fit: BoxFit.cover, // Agar gambar menyesuaikan ukuran container

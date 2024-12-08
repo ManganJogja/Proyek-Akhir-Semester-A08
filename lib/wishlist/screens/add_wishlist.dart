@@ -46,85 +46,176 @@ class _AddWishlistPageState extends State<AddWishlistPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Add Wishlist',
+          'Add Plan',
           style: TextStyle(color: Color(0xFF3E190E)),
         ),
         backgroundColor: const Color(0xFFDAC0A3),
         iconTheme: const IconThemeData(color: Color(0xFF3E190E)),
       ),
-      body: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              InkWell(
-                onTap: () => _selectDate(context),
-                child: InputDecorator(
-                  decoration: const InputDecoration(
-                    labelText: "Plan Date",
-                    border: OutlineInputBorder(),
+      body: Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            // Title
+            Text(
+              'Add Plan to Wishlist',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF3E190E),
+              ),
+            ),
+            const SizedBox(height: 20),
+            // Form Container
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF5E6D3),
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        _datePlan == null
-                            ? 'Select Date'
-                            : DateFormat('yyyy-MM-dd').format(_datePlan!),
+                ],
+              ),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Date Plan Field
+                    Text(
+                      'Plan Date',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF3E190E),
                       ),
-                      const Icon(Icons.calendar_today),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: "Additional Note",
-                  border: OutlineInputBorder(),
-                ),
-                onChanged: (String? value) {
-                  setState(() {
-                    _additionalNote = value!;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () async {
-                  if (_formKey.currentState!.validate() && _datePlan != null) {
-                    final success = await wishlistProvider.addWishlistWithPlan(
-                      request,
-                      widget.restaurantId,
-                      _datePlan!,
-                      _additionalNote,
-                    );
+                    ),
+                    const SizedBox(height: 8),
+                    InkWell(
+                      onTap: () => _selectDate(context),
+                      child: Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              _datePlan == null
+                                  ? 'Select Date'
+                                  : DateFormat('yyyy-MM-dd').format(_datePlan!),
+                            ),
+                            Icon(Icons.calendar_today),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    // Additional Notes Field
+                    Text(
+                      'Additional Notes',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF3E190E),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Enter your notes here',
+                      ),
+                      maxLines: 3,
+                      onChanged: (value) => _additionalNote = value,
+                    ),
+                    const SizedBox(height: 20),
+                    // Submit Button
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                        ),
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            if (_datePlan == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Please select a date'),
+                                ),
+                              );
+                              return;
+                            }
 
-                    if (success) {
-                      if (mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Successfully added to wishlist!'),
-                          ),
-                        );
-                        Navigator.pop(context);
-                      }
-                    } else {
-                      if (mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Failed to add to wishlist'),
-                          ),
-                        );
-                      }
-                    }
-                  }
-                },
-                child: const Text("Add Wishlist"),
+                            // Show loading indicator
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext context) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              },
+                            );
+
+                            try {
+                              final success = await wishlistProvider.addWishlistWithPlan(
+                                request,
+                                widget.restaurantId,
+                                _datePlan!,
+                                _additionalNote,
+                              );
+
+                              // Pop loading dialog
+                              if (mounted) Navigator.pop(context);
+
+                              if (success && mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Successfully added plan to wishlist!'),
+                                  ),
+                                );
+                                Navigator.pop(context);
+                              } else if (mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Failed to add plan. Please check your input and try again.'),
+                                  ),
+                                );
+                              }
+                            } catch (e) {
+                              // Pop loading dialog
+                              if (mounted) Navigator.pop(context);
+                              
+                              if (mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Error: ${e.toString()}'),
+                                  ),
+                                );
+                              }
+                            }
+                          }
+                        },
+                        child: const Text(
+                          'Save Plan',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

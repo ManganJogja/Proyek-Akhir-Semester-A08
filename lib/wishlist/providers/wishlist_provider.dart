@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../models/wishlist_entry.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:intl/intl.dart';
 
 class WishlistProvider extends ChangeNotifier {
   List<Wishlist> _wishlist = [];
@@ -11,6 +12,9 @@ class WishlistProvider extends ChangeNotifier {
   Future<void> fetchWishlist(CookieRequest request) async {
     try {
       final response = await request.get('http://127.0.0.1:8000/wishlist/json/');
+      print('Fetch response:');
+      print(response);
+      
       if (response is List) {
         _wishlist = wishlistFromJson(jsonEncode(response));
         notifyListeners();
@@ -46,16 +50,29 @@ class WishlistProvider extends ChangeNotifier {
 
   Future<bool> addWishlistWithPlan(CookieRequest request, String restaurantId, DateTime datePlan, String additionalNote) async {
     try {
+      // Debug print untuk melihat data yang dikirim
+      print('Sending data:');
+      print('Restaurant ID: $restaurantId');
+      print('Date Plan: ${datePlan.toIso8601String()}');
+      print('Additional Note: $additionalNote');
+
+      // Kirim data sesuai dengan format yang diharapkan oleh Django WishlistForm
       final response = await request.post(
         'http://127.0.0.1:8000/wishlist/add/$restaurantId/',
         {
-          'date_plan': datePlan.toIso8601String(),
+          'date_plan': DateFormat('yyyy-MM-dd').format(datePlan), // Format tanggal sesuai dengan Django
           'additional_note': additionalNote,
         },
       );
       
-      if (response is Map && response.containsKey('success')) {
+      // Debug print untuk melihat response
+      print('Response received:');
+      print(response);
+
+      // Periksa response sesuai dengan format Django
+      if (response is Map) {
         if (response['success'] == true) {
+          // Refresh wishlist setelah berhasil menambahkan plan
           await fetchWishlist(request);
           return true;
         }
