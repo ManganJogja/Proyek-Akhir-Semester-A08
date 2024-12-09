@@ -4,7 +4,7 @@ import 'package:mangan_jogja/widgets/drawer.dart';
 import 'package:mangan_jogja/widgets/bottom_navbar.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
-
+import 'package:mangan_jogja/main/screens/menu_detail.dart'; // Import halaman detail
 
 class MenuEntryPage extends StatefulWidget {
   const MenuEntryPage({super.key});
@@ -16,11 +16,8 @@ class MenuEntryPage extends StatefulWidget {
 class _MenuEntryPageState extends State<MenuEntryPage> {
   Future<List<MenuEntry>> fetchMenu(CookieRequest request) async {
     final response = await request.get('http://127.0.0.1:8000/admin-dashboard/json/');
-    
-    // Melakukan decode response menjadi bentuk json
     var data = response;
     
-    // Melakukan konversi data json menjadi object MenuEntry
     List<MenuEntry> listMenu = [];
     for (var d in data) {
       if (d != null) {
@@ -29,13 +26,24 @@ class _MenuEntryPageState extends State<MenuEntryPage> {
     }
     return listMenu;
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('All Menus'),
+        title: const Text(
+          'Cuisines',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+            color: Color(0xFF28110A), 
+          ),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
       drawer: const LeftDrawer(),
       body: FutureBuilder(
@@ -43,59 +51,75 @@ class _MenuEntryPageState extends State<MenuEntryPage> {
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.data == null) {
             return const Center(child: CircularProgressIndicator());
-          } else {
-            if (!snapshot.hasData) {
-              return const Column(
-                children: [
-                  Text(
-                    'Belum ada data menu pada ManganJogja.',
-                    style: TextStyle(fontSize: 20, color: Color(0xff59A5D8)),
-                  ),
-                  SizedBox(height: 8),
-                ],
-              );
-            } else {
-              return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (_, index) => Container(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "${snapshot.data![index].fields.namaMenu}",
-                        style: const TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      // Gambar menu dari URL
-                      Text("${snapshot.data![index].fields.imageUrl}"),
-                      Image.network(
-                        snapshot.data![index].fields.imageUrl,
-                        height: 200, // Atur tinggi gambar
-                        width: 200,
-                        fit: BoxFit.cover, // Agar gambar menyesuaikan ukuran container
-                        errorBuilder: (context, error, stackTrace) =>
-                            const Icon(Icons.broken_image), // Tampilkan ikon jika gagal
-                      ),
-                      const SizedBox(height: 10),
-                       // Deskripsi menu
-                      Text(
-                        "${snapshot.data![index].fields.deskripsi}",
-                        style: const TextStyle(
-                          fontSize: 14.0,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
+          } else if (!snapshot.hasData) {
+            return const Center(
+              child: Text(
+                'Belum ada data menu pada ManganJogja.',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Color(0xff59A5D8),
                 ),
-              );
-            }
+              ),
+            );
+          } else {
+            return GridView.builder(
+              padding: const EdgeInsets.all(16),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                childAspectRatio: 0.85,
+              ),
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                final menu = snapshot.data![index];
+                return GestureDetector( // Tambahkan GestureDetector
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MenuDetailPage(menu: menu),
+                      ),
+                    );
+                  },
+                  child: Card(
+                    clipBehavior: Clip.antiAlias,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Column(
+                      children: [
+                        Expanded(
+                          flex: 4, 
+                          child: Image.network(
+                            menu.fields.imageUrl,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                const Center(child: Icon(Icons.broken_image)),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1, 
+                          child: Center(
+                            child: Text(
+                              menu.fields.namaMenu,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF28110A), 
+                              ),
+                              textAlign: TextAlign.center,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
           }
         },
       ),
