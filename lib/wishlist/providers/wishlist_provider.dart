@@ -83,4 +83,62 @@ class WishlistProvider extends ChangeNotifier {
       return false;
     }
   }
+
+  Future<bool> editWishlistPlan(
+    CookieRequest request,
+    String restaurantId,
+    DateTime datePlan,
+    String additionalNote,
+  ) async {
+    try {
+      print('Sending edit data:');
+      print('Restaurant ID: $restaurantId');
+      print('Date Plan: ${datePlan.toIso8601String()}');
+      print('Additional Note: $additionalNote');
+
+      final response = await request.post(
+        'http://127.0.0.1:8000/wishlist/edit/$restaurantId/',
+        {
+          'date_plan': DateFormat('yyyy-MM-dd').format(datePlan),
+          'additional_note': additionalNote,
+        },
+      );
+      
+      print('Edit response received:');
+      print(response);
+
+      if (response is Map && response['success'] == true) {
+        await fetchWishlist(request);
+        return true;
+      }
+      return false;
+    } catch (e) {
+      print('Error editing wishlist plan: $e');
+      return false;
+    }
+  }
+
+  Future<bool> deleteWishlist(CookieRequest request, String restaurantId) async {
+    try {
+      print('Deleting wishlist item:');
+      print('Restaurant ID: $restaurantId');
+
+      final response = await request.post(
+        'http://127.0.0.1:8000/wishlist/delete/$restaurantId/',
+        {},
+      );
+      
+      print('Delete response received:');
+      print(response);
+
+      if (response is Map && response['success'] == true) {
+        await fetchWishlist(request);
+        return true;
+      }
+      return false;
+    } catch (e) {
+      print('Error deleting wishlist item: $e');
+      return false;
+    }
+  }
 }

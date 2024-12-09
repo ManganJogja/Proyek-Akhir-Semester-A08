@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/wishlist_provider.dart'; // Import WishlistProvider
 import 'package:intl/intl.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'edit_wishlist.dart';
 
 class WishlistPage extends StatefulWidget {
   const WishlistPage({super.key});
@@ -119,17 +120,97 @@ class _WishlistPageState extends State<WishlistPage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => AddWishlistPage(
+                                    builder: (context) => EditWishlistPage(
                                       restaurantId: item.fields.restaurant,
+                                      currentDatePlan: item.fields.datePlan,
+                                      currentNote: item.fields.additionalNote,
                                     ),
                                   ),
                                 );
                               },
-                              child: Text(
-                                item.fields.datePlan == null
-                                    ? 'Add Plan'
-                                    : 'Edit Plan',
-                                style: const TextStyle(color: Colors.blue),
+                              child: const Text(
+                                'Edit Plan',
+                                style: TextStyle(color: Colors.blue),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                // Tampilkan dialog konfirmasi
+                                final shouldDelete = await showDialog<bool>(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text('Delete Wishlist Item'),
+                                      content: const Text('Are you sure you want to delete this item from your wishlist?'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () => Navigator.of(context).pop(false),
+                                          child: const Text('Cancel'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () => Navigator.of(context).pop(true),
+                                          child: const Text(
+                                            'Delete',
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+
+                                // Jika user mengkonfirmasi delete
+                                if (shouldDelete == true) {
+                                  final request = context.read<CookieRequest>();
+                                  
+                                  // Show loading indicator
+                                  showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (BuildContext context) {
+                                      return const Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    },
+                                  );
+
+                                  try {
+                                    final success = await Provider.of<WishlistProvider>(context, listen: false)
+                                        .deleteWishlist(request, item.fields.restaurant);
+
+                                    // Pop loading dialog
+                                    if (mounted) Navigator.pop(context);
+
+                                    if (success && mounted) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Successfully deleted from wishlist!'),
+                                        ),
+                                      );
+                                    } else if (mounted) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Failed to delete item'),
+                                        ),
+                                      );
+                                    }
+                                  } catch (e) {
+                                    // Pop loading dialog
+                                    if (mounted) Navigator.pop(context);
+                                    
+                                    if (mounted) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text('Error: ${e.toString()}'),
+                                        ),
+                                      );
+                                    }
+                                  }
+                                }
+                              },
+                              child: const Text(
+                                'Delete',
+                                style: TextStyle(color: Colors.red),
                               ),
                             ),
                           ],
