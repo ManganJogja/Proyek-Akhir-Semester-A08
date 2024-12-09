@@ -30,6 +30,7 @@ class _MenuEntryPageState extends State<MenuEntryPage> {
   @override
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
+    final token = request.cookies['csrftoken'];
     return Scaffold(
       appBar: AppBar(
         title: const Text(
