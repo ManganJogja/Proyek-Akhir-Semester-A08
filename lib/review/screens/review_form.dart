@@ -3,8 +3,13 @@ import 'package:google_fonts/google_fonts.dart';
 
 class ReviewForm extends StatefulWidget {
   final Map<String, dynamic> initialReview; // Accept the initial review data
+  final bool isEditing; // Add a flag to determine if we are editing
 
-  const ReviewForm({super.key, required this.initialReview});
+  const ReviewForm({
+    Key? key,
+    required this.initialReview,
+    this.isEditing = false,
+  }) : super(key: key);
 
   @override
   _ReviewFormState createState() => _ReviewFormState();
@@ -12,15 +17,14 @@ class ReviewForm extends StatefulWidget {
 
 class _ReviewFormState extends State<ReviewForm> {
   final TextEditingController _reviewController = TextEditingController();
-  final TextEditingController _usernameController = TextEditingController();
-  int _rating = 1; // Rating bintang (1-5)
+  int _rating = 1; // Default rating (1-5)
 
   @override
   void initState() {
     super.initState();
-    // If there's an initial review, set the text controllers
+
+    // Prepopulate the form if editing
     if (widget.initialReview.isNotEmpty) {
-      _usernameController.text = widget.initialReview['username'] ?? '';
       _reviewController.text = widget.initialReview['reviewText'] ?? '';
       _rating = widget.initialReview['rating'] ?? 1;
     }
@@ -36,28 +40,28 @@ class _ReviewFormState extends State<ReviewForm> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // Align everything to the left except for 'REVIEWS'
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Add "REVIEWS" title
+            // Title
             Center(
               child: Text(
-                'REVIEWS', // Title Text for Reviews section
+                'REVIEWS',
                 style: GoogleFonts.abhayaLibre(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: const Color(0xFF3E190E), // Adjust color
+                  color: const Color(0xFF3E190E),
                 ),
               ),
             ),
             const SizedBox(height: 20),
-            
-            // Ratings Section (with interactive stars)
+
+            // Rating Section
             Text(
-              'Ratings :', // Title Text for Ratings section
+              'Ratings:',
               style: GoogleFonts.abhayaLibre(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF3E190E), // Adjust color
+                color: const Color(0xFF3E190E),
               ),
             ),
             const SizedBox(height: 8),
@@ -71,21 +75,21 @@ class _ReviewFormState extends State<ReviewForm> {
                   ),
                   onPressed: () {
                     setState(() {
-                      _rating = index + 1; // Update rating on click
+                      _rating = index + 1; // Update rating
                     });
                   },
                 );
               }),
             ),
             const SizedBox(height: 20),
-            
+
             // Review Text Field
             Text(
-              'Reviews :', // Title Text for Reviews section
+              'Reviews:',
               style: GoogleFonts.abhayaLibre(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF3E190E), // Adjust color
+                color: const Color(0xFF3E190E),
               ),
             ),
             const SizedBox(height: 8),
@@ -103,59 +107,45 @@ class _ReviewFormState extends State<ReviewForm> {
               ),
             ),
             const SizedBox(height: 20),
-            
-            // Username Text Field
-            Text(
-              'Username :', // Title Text for Username section
-              style: GoogleFonts.abhayaLibre(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF3E190E), // Adjust color
-              ),
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: _usernameController,
-              decoration: InputDecoration(
-                hintText: 'Enter your username',
-                filled: true,
-                fillColor: const Color(0xFFF8F0E5),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
+
+            // Submit Button
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  if (_reviewController.text.isNotEmpty && _rating > 0) {
+                    final reviewData = {
+                      'rating': _rating,
+                      'reviewText': _reviewController.text,
+                      'date': DateTime.now().toLocal().toString(),
+                    };
+
+                    print('Submitting review data: $reviewData'); // Debugging
+
+                    // Pass data back to ReviewPage
+                    Navigator.pop(context, reviewData);
+                  } else {
+                    // Show error if input is invalid
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Please provide a rating and review text'),
+                      ),
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF7C4D41),
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
                 ),
-              ),
-            ),
-            const SizedBox(height: 30),
-            
-            // Add Review Button
-            ElevatedButton(
-              onPressed: () {
-                if (_reviewController.text.isNotEmpty &&
-                    _usernameController.text.isNotEmpty) {
-                  // Membuat map review
-                  final reviewData = {
-                    'username': _usernameController.text,
-                    'rating': _rating,
-                    'reviewText': _reviewController.text,
-                    'date': 'Posted on ${DateTime.now().toLocal()}',
-                  };
-                  Navigator.pop(context, reviewData); // Mengirim data kembali ke ReviewPage
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF7C4D41),
-                padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-              ),
-              child: Text(
-                'ADD REVIEW', // Title Text for Reviews section
-                style: GoogleFonts.abhayaLibre(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: const Color(0xFFF8F0E5), // Adjust color
+                child: Text(
+                  widget.isEditing ? 'Update Review' : 'Submit Review',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),

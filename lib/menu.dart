@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mangan_jogja/widgets/bottom_navbar.dart'; 
+import 'package:mangan_jogja/widgets/bottom_navbar.dart';
 import 'package:mangan_jogja/reserve/screens/product_card.dart';
 import 'package:mangan_jogja/widgets/drawer.dart'; // Import LeftDrawer
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
-import 'package:mangan_jogja/widgets/drawer.dart'; // Import LeftDrawer
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -21,22 +17,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ItemHomepage("Lihat Daftar Produk", Icons.shopping_cart),
     ItemHomepage("Tambah Produk", Icons.add),
     ItemHomepage("Logout", Icons.logout),
-  ];
-  final List<Color> cardColors = [
-    Color(0xFF8b6c5c),
-    Color(0xFF6a4a3a),
-    Color(0xFF3D251E),
-  ];
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _currentIndex = 0; // Menyimpan halaman yang aktif
-  final List<ItemHomepage> items = [
-    ItemHomepage("Lihat Daftar Produk", Icons.shopping_cart),
-    ItemHomepage("Tambah Produk", Icons.add),
-    ItemHomepage("Logout", Icons.logout),
+    ItemHomepage("My Review", Icons.reviews)
   ];
   final List<Color> cardColors = [
     Color(0xFF8b6c5c),
@@ -44,20 +25,6 @@ class _MyHomePageState extends State<MyHomePage> {
     Color(0xFF3D251E),
   ];
 
-  // Callback untuk mengubah halaman saat item BottomNav dipilih
-  void _onItemTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
-
-  // Daftar halaman untuk ditampilkan berdasarkan indeks
-  final List<Widget> _pages = [
-    const MyHomePage(), // Ganti dengan halaman sesuai
-    // const WishlistPage(),
-    // const ReservationPage(),
-    // const OrdersPage(),
-  ];
   // Callback untuk mengubah halaman saat item BottomNav dipilih
   void _onItemTapped(int index) {
     setState(() {
@@ -76,8 +43,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F6F6),
-      drawer: const LeftDrawer(), // Menggunakan LeftDrawer yang sudah kamu buat
       backgroundColor: const Color(0xFFF6F6F6),
       drawer: const LeftDrawer(), // Menggunakan LeftDrawer yang sudah kamu buat
       appBar: PreferredSize(
@@ -101,30 +66,13 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             backgroundColor: const Color(0xFFDAC0A3),
             title: Padding(
-          child: AppBar(
-            automaticallyImplyLeading: true, // Agar menu drawer muncul
-            leading: Builder(
-              builder: (BuildContext context) {
-                return IconButton(
-                  icon: const Icon(Icons.menu),
-                  onPressed: () {
-                    Scaffold.of(context).openDrawer(); // Membuka drawer
-                  },
-                );
-              },
-            ),
-            backgroundColor: const Color(0xFFDAC0A3),
-            title: Padding(
               padding: const EdgeInsets.only(left: 16.0),
               child: Row(
                 children: [
                   Image.asset(
                     'assets/images/Logo.png',
                     height: 40.0,
-                    'assets/images/Logo.png',
-                    height: 40.0,
                   ),
-                  const SizedBox(width: 8.0),
                   const SizedBox(width: 8.0),
                   Text(
                     "ManganJogja.",
@@ -153,38 +101,32 @@ class _MyHomePageState extends State<MyHomePage> {
                   const Padding(
                     padding: EdgeInsets.only(top: 16.0),
                     child: Text(
-                      'Welcome to ManganJogja',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
-                      ),
-                    ),
+              'Welcome to ManganJogja',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18.0,
+              ),
+            ),
                   ),
                   // Grid untuk menampilkan item
-                  // Grid untuk menampilkan item
-                  GridView.count(
+            GridView.count(
                     primary: true,
                     padding: const EdgeInsets.all(20),
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
                     crossAxisCount: 3,
-                    shrinkWrap: true,
-                    children: List.generate(items.length, (index) {
-                      return ItemCard(
+              shrinkWrap: true,
+              children: List.generate(items.length, (index) {
+                return ItemCard(
                           items[index], cardColors[index % cardColors.length]);
-                      return ItemCard(
-                          items[index], cardColors[index % cardColors.length]);
-                    }),
-                  ),
-                ],
-              ),
+              }),
             ),
           ],
         ),
       ),
-      bottomNavigationBar: BottomNav(
-        onItemTapped: _onItemTapped,
-        currentIndex: _currentIndex,
+          ],
+        ),
+      ),
       bottomNavigationBar: BottomNav(
         onItemTapped: _onItemTapped,
         currentIndex: _currentIndex,

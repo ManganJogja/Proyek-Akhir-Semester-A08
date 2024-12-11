@@ -1,47 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:mangan_jogja/reserve/screens/reservation_form.dart';
 import 'package:mangan_jogja/reserve/screens/reservepage.dart';
+import 'package:mangan_jogja/review/screens/review_page.dart';
 
 class ItemHomepage {
-     final String name;
-     final IconData icon;
+  final String name;
+  final IconData icon;
 
-     ItemHomepage(this.name, this.icon);
+  ItemHomepage(this.name, this.icon);
 }
 
 class ItemCard extends StatelessWidget {
-
-  final ItemHomepage item; 
-  final Color color; 
-  const ItemCard(this.item, this.color, {super.key}); 
+  final ItemHomepage item;
+  final Color color;
+  const ItemCard(this.item, this.color, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return Material(
       color: color,
       borderRadius: BorderRadius.circular(12),
-      
       child: InkWell(
         onTap: () {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              SnackBar(content: Text("Kamu telah menekan tombol ${item.name}!"))
+              SnackBar(content: Text("Kamu telah menekan tombol ${item.name}!")),
             );
-            if (item.name == "Tambah Produk") {
-              Navigator.pushReplacement(
-                  context, 
-                  MaterialPageRoute(
-                    builder: (context) => const ReservationPageForm()),
-              );
-            }
-            else if (item.name == "Lihat Daftar Produk") {
-              Navigator.pushReplacement(
-                  context, 
-                  MaterialPageRoute(
-                    builder: (context) => ReservedRestaurantsPage()),
-              );
-            }
+          if (item.name == "Tambah Produk") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ReservationPageForm(),
+              ),
+            );
+          } else if (item.name == "Lihat Daftar Produk") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ReservedRestaurantsPage(),
+              ),
+            );
+          } else if (item.name == "My Reviews") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ReviewPage(restaurantName: 'Gudeg Yudjum', restaurantId: '',),
+              ),
+            );
+          }
         },
         child: Container(
           padding: const EdgeInsets.all(8),
@@ -67,5 +74,4 @@ class ItemCard extends StatelessWidget {
       ),
     );
   }
-  
 }

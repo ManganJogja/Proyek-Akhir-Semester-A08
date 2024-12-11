@@ -3,6 +3,8 @@ import 'package:mangan_jogja/models/resto_entry.dart';
 import 'package:mangan_jogja/widgets/drawer.dart';
 import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:mangan_jogja/review/screens/review_page.dart'; // Import ReviewPage
+import 'package:mangan_jogja/review/screens/review_page.dart'; // Import ReviewPage
 
 class RestoEntryPage extends StatefulWidget {
   const RestoEntryPage({super.key});
@@ -80,7 +82,6 @@ class RestoCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Informasi Restoran
                 Text(
                   restoEntry.fields.namaResto,
                   style: const TextStyle(
