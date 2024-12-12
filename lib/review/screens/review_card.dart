@@ -1,3 +1,4 @@
+// ReviewCard.dart
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -6,169 +7,185 @@ class ReviewCard extends StatefulWidget {
   final int rating;
   final String reviewText;
   final String date;
-  final Function onDelete; // Callback for deleting the review
-  final Function onEdit; // Callback for editing the review
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
+  final bool canEdit;
 
   const ReviewCard({
-    super.key,
+    Key? key,
     required this.username,
     required this.rating,
     required this.reviewText,
     required this.date,
-    required this.onDelete, // Passing the onDelete function
-    required this.onEdit,   // Passing the onEdit function
-  });
+    required this.onEdit,
+    required this.onDelete,
+    this.canEdit = true,
+  }) : super(key: key);
 
   @override
-  _ReviewCardState createState() => _ReviewCardState();
+  State<ReviewCard> createState() => _ReviewCardState();
 }
 
-class _ReviewCardState extends State<ReviewCard> {
-  late TextEditingController _usernameController;
-  late TextEditingController _reviewController;
-  bool isEditing = false;
+class _ReviewCardState extends State<ReviewCard> with SingleTickerProviderStateMixin {
+  bool isHovered = false;
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  String _formatDate(String dateString) {
+    final DateTime date = DateTime.parse(dateString);
+    final List<String> months = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    
+    return '${months[date.month - 1]} ${date.day}, ${date.year}';
+  }
 
   @override
   void initState() {
     super.initState();
-    _usernameController = TextEditingController(text: widget.username);
-    _reviewController = TextEditingController(text: widget.reviewText);
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 200),
+      vsync: this,
+    );
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.02).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
   }
 
   @override
   void dispose() {
-    _usernameController.dispose();
-    _reviewController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15), // Membulatkan sudut card
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                // Using Icon for user profile
-                const CircleAvatar(
-                  radius: 25,
-                  child: Icon(
-                    Icons.person,
-                    color: Colors.white,
-                    size: 30,
-                  ),
-                  backgroundColor: Color(0xFF7C4D41), // Color for the background of the avatar
-                ),
-                const SizedBox(width: 10),
-                // Username Text
-                isEditing
-                    ? TextField(
-                        controller: _usernameController,
-                        style: GoogleFonts.mulish(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: const Color(0xFF3E190E), // Adjust the color as needed
-                        ),
-                        decoration: const InputDecoration(border: OutlineInputBorder()),
-                      )
-                    : Text(
-                        widget.username,
-                        style: GoogleFonts.mulish(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: const Color(0xFF3E190E), // Adjust the color as needed
-                        ),
-                      ),
-                const Spacer(),
-                Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.edit, color: Color(0xFF3E190E)),
-                      onPressed: () {
-                        setState(() {
-                          isEditing = !isEditing;
-                        });
-                        if (isEditing) {
-                          widget.onEdit(); // Trigger the edit functionality
-                        }
-                      },
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.delete, color: Color(0xFF3E190E)),
-                      onPressed: () {
-                        widget.onDelete(); // Delete the review
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Row(
-              children: List.generate(5, (index) {
-                return Icon(
-                  index < widget.rating ? Icons.star : Icons.star_border,
-                  color: Colors.yellow,
-                  size: 20,
-                );
-              }),
-            ),
-            const SizedBox(height: 10),
-            isEditing
-                ? TextField(
-                    controller: _reviewController,
-                    maxLines: 4,
-                    decoration: InputDecoration(
-                      hintText: 'Write your review here...',
-                      filled: true,
-                      fillColor: const Color(0xFFF8F0E5),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  )
-                : Text(
-                    widget.reviewText,
-                    style: GoogleFonts.mulish(
-                      fontSize: 16,
-                      color: const Color(0xFF3E190E),
-                    ),
-                  ),
-            const SizedBox(height: 10),
-            Text(
-              widget.date,
-              style: const TextStyle(fontSize: 12, color: const Color(0xFF7C4D41),
-              fontStyle: FontStyle.italic),
-            ),
-            const SizedBox(height: 10),
-            if (isEditing) // Show "Save" button when editing
-              ElevatedButton(
-                onPressed: () {
-                  // Save the updated review data
-                  widget.onEdit(); // Update the review when "Save" is pressed
-                  setState(() {
-                    isEditing = false;
-                  });
-                },
-                child: const Text('Save'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF7C4D41), // Warna tombol
-                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                ),
+    return MouseRegion(
+      onEnter: (_) {
+        setState(() {
+          isHovered = true;
+          _controller.forward();
+        });
+      },
+      onExit: (_) {
+        setState(() {
+          isHovered = false;
+          _controller.reverse();
+        });
+      },
+      child: AnimatedBuilder(
+        animation: _scaleAnimation,
+        builder: (context, child) {
+          return Transform.scale(
+            scale: _scaleAnimation.value,
+            child: Container(
+              margin: const EdgeInsets.symmetric(vertical: 10),
+              decoration: BoxDecoration(
+                color: const Color(0xFFE7DBC6),
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: isHovered
+                    ? [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
+                        )
+                      ]
+                    : [],
               ),
-          ],
-        ),
+              padding: const EdgeInsets.all(16),
+              child: Stack(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 16,
+                            backgroundColor: const Color(0xFF7C4D41),
+                            child: const Icon(
+                              Icons.person,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            widget.username,
+                            style: GoogleFonts.mulish(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: const Color(0xFF3E190E),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: List.generate(5, (index) {
+                          return Icon(
+                            index < widget.rating ? Icons.star : Icons.star_border,
+                            color: Colors.amber,
+                            size: 20,
+                          );
+                        }),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        widget.reviewText,
+                        style: GoogleFonts.mulish(
+                          fontSize: 14,
+                          color: const Color(0xFF3E190E),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Posted on ${_formatDate(widget.date)}',
+                        style: GoogleFonts.mulish(
+                          fontSize: 12,
+                          color: const Color(0xFF7C4D41),
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (widget.canEdit)
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _buildAnimatedIconButton(
+                            Icons.edit,
+                            widget.onEdit,
+                          ),
+                          _buildAnimatedIconButton(
+                            Icons.delete,
+                            widget.onDelete,
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildAnimatedIconButton(IconData icon, VoidCallback onPressed) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: IconButton(
+        icon: Icon(icon, color: const Color(0xFF3E190E)),
+        onPressed: onPressed,
+        hoverColor: const Color(0xFFDAC0A3).withOpacity(0.3),
+        splashColor: const Color(0xFFDAC0A3).withOpacity(0.5),
       ),
     );
   }

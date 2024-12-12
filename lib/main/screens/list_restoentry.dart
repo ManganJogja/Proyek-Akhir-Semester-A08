@@ -109,7 +109,16 @@ class RestoCard extends StatelessWidget {
                     // Tombol "Click to see reviews" di kiri
                     TextButton(
                       onPressed: () {
-                        // Tambahkan logika untuk tombol "Click to see reviews" di sini
+                        // Navigasi ke halaman ReviewPage dengan data restoran
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ReviewPage(
+                              restaurantName: restoEntry.fields.namaResto,
+                              restaurantId: restoEntry.pk, // Gunakan Primary Key untuk ID restoran
+                            ),
+                          ),
+                        );
                       },
                       child: const Text(
                         'Click to see reviews',
@@ -119,7 +128,6 @@ class RestoCard extends StatelessWidget {
                         ),
                       ),
                     ),
-
                     // Tombol "Make Reservation" di kanan
                     ElevatedButton(
                       onPressed: () {

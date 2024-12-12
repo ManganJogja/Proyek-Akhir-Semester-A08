@@ -10,7 +10,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return Provider(
@@ -22,13 +21,11 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSwatch(
-                primarySwatch: Colors.brown,
-            ).copyWith(secondary: Colors.brown[400]),
+            primarySwatch: Colors.brown,
+          ).copyWith(secondary: Colors.brown[400]),
         ),
-        
         home: StartPage(),
       ),
     );
   }
 }
-
