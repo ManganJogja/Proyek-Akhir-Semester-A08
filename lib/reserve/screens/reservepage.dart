@@ -2,16 +2,20 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:mangan_jogja/main/screens/list_menuentry.dart';
 import 'package:mangan_jogja/models/resto_entry.dart';
 import 'package:mangan_jogja/reserve/models/reserve_entry.dart';
 import 'package:mangan_jogja/reserve/screens/edit_reserve.dart';
+import 'package:mangan_jogja/reserve/screens/login.dart';
+import 'package:mangan_jogja/reserve/screens/logout.dart';
+import 'package:mangan_jogja/widgets/bottom_navbar.dart';
 import 'package:mangan_jogja/widgets/drawer.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
 class ReservedRestaurantsPage extends StatefulWidget {
   const ReservedRestaurantsPage({super.key});
-
+  
   @override
   State<ReservedRestaurantsPage> createState() =>
       _ReservedRestaurantsPageState();
@@ -19,7 +23,35 @@ class ReservedRestaurantsPage extends StatefulWidget {
 
 class _ReservedRestaurantsPageState extends State<ReservedRestaurantsPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  int _currentIndex = 1;
+  final List<Widget> _pages = [
+    const MenuEntryPage(), // Home
+    const ReservedRestaurantsPage(), // Wishlist
+    const ReservedRestaurantsPage(), // Reservation
+    const ReservedRestaurantsPage(), // Orders
+    const LoginApp(), // Logout
+  ];
 
+  void _onItemTapped(int index) {
+    if (index == 4) {
+      // Logout logic
+      _performLogout();
+    } else {
+      // Navigasi ke halaman yang sesuai
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => _pages[index]),
+      );
+    }
+  }
+
+  Future<void> _performLogout() async {
+    bool success = await LogoutHandler.logoutUser(context);
+    if (success) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginApp()),
+      );
+    }
+  }
   String? selectedResto; 
   List<ReserveEntry> allReserves = [];
   List<String> restoOptions = []; 
@@ -291,6 +323,10 @@ Widget build(BuildContext context) {
         ),
       ],
     ),
+    bottomNavigationBar: BottomNav(
+        onItemTapped: _onItemTapped,
+        currentIndex: _currentIndex,
+      ),
   );
 }
 

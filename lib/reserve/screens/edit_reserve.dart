@@ -2,7 +2,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:mangan_jogja/main/screens/list_menuentry.dart';
+import 'package:mangan_jogja/reserve/screens/login.dart';
+import 'package:mangan_jogja/reserve/screens/logout.dart';
 import 'package:mangan_jogja/reserve/screens/reservepage.dart';
+import 'package:mangan_jogja/widgets/bottom_navbar.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 
 class EditReservationScreen extends StatefulWidget {
@@ -16,7 +20,35 @@ class EditReservationScreen extends StatefulWidget {
 
 class _EditReservationScreenState extends State<EditReservationScreen> {
   final _formKey = GlobalKey<FormState>();
+  int _currentIndex = 1;
+  final List<Widget> _pages = [
+    const MenuEntryPage(), // Home
+    const ReservedRestaurantsPage(), // Wishlist
+    const ReservedRestaurantsPage(), // Reservation
+    const ReservedRestaurantsPage(), // Orders
+    const LoginApp(), // Logout
+  ];
 
+  void _onItemTapped(int index) {
+    if (index == 4) {
+      // Logout logic
+      _performLogout();
+    } else {
+      // Navigasi ke halaman yang sesuai
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => _pages[index]),
+      );
+    }
+  }
+
+  Future<void> _performLogout() async {
+    bool success = await LogoutHandler.logoutUser(context);
+    if (success) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginApp()),
+      );
+    }
+  }
   // Controllers for form fields
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
@@ -213,6 +245,10 @@ Future<void> _updateReservation(CookieRequest request) async {
           ),
         ),
       ),
+      ),
+      bottomNavigationBar: BottomNav(
+        onItemTapped: _onItemTapped,
+        currentIndex: _currentIndex,
       ),
     );
   }

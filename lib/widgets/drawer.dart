@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mangan_jogja/main/screens/list_menuentry.dart';
 import 'package:mangan_jogja/main/screens/list_restoentry.dart';
-import 'package:mangan_jogja/menu.dart';
 import 'package:mangan_jogja/reserve/screens/reservation_form.dart';
 import 'package:mangan_jogja/reserve/screens/reservepage.dart';
 
@@ -46,13 +45,13 @@ class LeftDrawer extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MyHomePage(),
+                      builder: (context) => MenuEntryPage(),
                     ));
               },
             ),
             
             ListTile(
-              leading: const Icon(Icons.add),
+              leading: const Icon(Icons.table_bar),
               title: const Text('Lihat Reserve'),
               onTap: () {
                 Navigator.pushReplacement(
