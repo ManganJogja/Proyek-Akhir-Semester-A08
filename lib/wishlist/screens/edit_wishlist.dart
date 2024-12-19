@@ -83,7 +83,7 @@ class _EditWishlistPageState extends State<EditWishlistPage> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: const Color(0xFFF5E6D3),
+                color: const Color.fromARGB(255, 255, 255, 255),
                 borderRadius: BorderRadius.circular(8),
                 boxShadow: [
                   BoxShadow(
@@ -138,20 +138,29 @@ class _EditWishlistPageState extends State<EditWishlistPage> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    TextFormField(
-                      controller: _noteController,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Enter your notes here',
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(4),
                       ),
-                      maxLines: 3,
+                      child: TextFormField(
+                        controller: _noteController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                          ),
+                          hintText: 'Enter your notes here',
+                        ),
+                        maxLines: 3,
+                      ),
                     ),
+                    
                     const SizedBox(height: 20),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
+                          backgroundColor: Color(0xFFDAC0A3),
                           padding: const EdgeInsets.symmetric(vertical: 12),
                         ),
                         onPressed: () async {
@@ -214,7 +223,11 @@ class _EditWishlistPageState extends State<EditWishlistPage> {
                         },
                         child: const Text(
                           'Save Changes',
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF3E190E),
+                        ),
                         ),
                       ),
                     ),
