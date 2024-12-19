@@ -5,6 +5,7 @@ import '../providers/wishlist_provider.dart'; // Import WishlistProvider
 import 'package:intl/intl.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'edit_wishlist.dart';
+import 'package:mangan_jogja/menu.dart'; // Import MyHomePage
 
 class WishlistPage extends StatefulWidget {
   const WishlistPage({super.key});
@@ -33,6 +34,15 @@ class _WishlistPageState extends State<WishlistPage> {
         ),
         backgroundColor: const Color(0xFFDAC0A3),
         iconTheme: const IconThemeData(color: Color(0xFF3E190E)),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const MyHomePage()), // Arahkan ke MyHomePage
+            );
+          },
+        ),
       ),
       body: Consumer<WishlistProvider>(
         builder: (context, provider, child) {
@@ -105,7 +115,7 @@ class _WishlistPageState extends State<WishlistPage> {
                                 );
                               },
                               child: const Text(
-                                'Edit Plan',
+                                'Add/Edit Plan',
                                 style: TextStyle(color: Colors.blue),
                               ),
                             ),

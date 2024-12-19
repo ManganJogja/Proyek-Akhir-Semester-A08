@@ -61,7 +61,7 @@ class _EditWishlistPageState extends State<EditWishlistPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Edit Plan',
+          'Add/Edit Plan',
           style: TextStyle(color: Color(0xFF3E190E)),
         ),
         backgroundColor: const Color(0xFFDAC0A3),
@@ -72,7 +72,7 @@ class _EditWishlistPageState extends State<EditWishlistPage> {
         child: Column(
           children: [
             Text(
-              'Edit Wishlist Plan',
+              'Add/Edit Wishlist Plan',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
