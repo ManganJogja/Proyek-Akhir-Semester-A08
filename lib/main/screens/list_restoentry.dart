@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:mangan_jogja/wishlist/models/wishlist_entry.dart'; // Import WishlistEntry
 import 'package:mangan_jogja/wishlist/providers/wishlist_provider.dart'; // Import WishlistProvider
+import 'package:mangan_jogja/review/screens/review_page.dart'; // Import ReviewPage
+import 'package:mangan_jogja/review/screens/review_page.dart'; // Import ReviewPage
 
 class RestoEntryPage extends StatefulWidget {
   const RestoEntryPage({super.key});
@@ -85,7 +87,6 @@ class RestoCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Informasi Restoran
                 Text(
                   restoEntry.fields.namaResto,
                   style: const TextStyle(
@@ -113,7 +114,16 @@ class RestoCard extends StatelessWidget {
                     // Tombol "Click to see reviews" di kiri
                     TextButton(
                       onPressed: () {
-                        // Tambahkan logika untuk tombol "Click to see reviews" di sini
+                        // Navigasi ke halaman ReviewPage dengan data restoran
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ReviewPage(
+                              restaurantName: restoEntry.fields.namaResto,
+                              restaurantId: restoEntry.pk, // Gunakan Primary Key untuk ID restoran
+                            ),
+                          ),
+                        );
                       },
                       child: const Text(
                         'Click to see reviews',
@@ -123,7 +133,6 @@ class RestoCard extends StatelessWidget {
                         ),
                       ),
                     ),
-
                     // Tombol "Make Reservation" di kanan
                     ElevatedButton(
                       onPressed: () {

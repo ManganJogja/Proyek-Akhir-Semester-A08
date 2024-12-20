@@ -27,10 +27,9 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSwatch(
-                primarySwatch: Colors.brown,
-            ).copyWith(secondary: Colors.brown[400]),
+            primarySwatch: Colors.brown,
+          ).copyWith(secondary: Colors.brown[400]),
         ),
-        
         home: StartPage(),
       ),
     );

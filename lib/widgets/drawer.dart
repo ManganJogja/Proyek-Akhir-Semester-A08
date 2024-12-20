@@ -5,6 +5,7 @@ import 'package:mangan_jogja/main/screens/list_restoentry.dart';
 import 'package:mangan_jogja/reserve/screens/reservation_form.dart';
 import 'package:mangan_jogja/reserve/screens/reservepage.dart';
 import 'package:mangan_jogja/wishlist/screens/wishlist_page.dart';
+import 'package:mangan_jogja/review/screens/review_page.dart'; // Pastikan Anda mengimpor halaman review
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
@@ -100,4 +101,3 @@ class LeftDrawer extends StatelessWidget {
     );
   }
 }
-// home, menu, resto, wishlist, order, reserve
