@@ -4,6 +4,7 @@ import 'package:mangan_jogja/main/screens/list_menuentry.dart';
 import 'package:mangan_jogja/main/screens/list_restoentry.dart';
 import 'package:mangan_jogja/reserve/screens/reservation_form.dart';
 import 'package:mangan_jogja/reserve/screens/reservepage.dart';
+import 'package:mangan_jogja/wishlist/screens/wishlist_page.dart';
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
@@ -59,6 +60,17 @@ class LeftDrawer extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) => ReservedRestaurantsPage()),
               );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.favorite_border),
+              title: const Text('Wishlist'),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context, 
+                  MaterialPageRoute(
+                    builder: (context) => const WishlistPage()),
+                );
               },
             ),
             ListTile(

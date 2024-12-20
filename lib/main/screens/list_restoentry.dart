@@ -4,6 +4,8 @@ import 'package:mangan_jogja/reserve/screens/reservation_form.dart';
 import 'package:mangan_jogja/widgets/drawer.dart';
 import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:mangan_jogja/wishlist/models/wishlist_entry.dart'; // Import WishlistEntry
+import 'package:mangan_jogja/wishlist/providers/wishlist_provider.dart'; // Import WishlistProvider
 
 class RestoEntryPage extends StatefulWidget {
   const RestoEntryPage({super.key});
@@ -71,6 +73,8 @@ class RestoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final wishlistProvider = Provider.of<WishlistProvider>(context); // Ambil instance WishlistProvider
+
     return Card(
       elevation: 4,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -151,11 +155,29 @@ class RestoCard extends StatelessWidget {
             top: 8,
             right: 8,
             child: IconButton(
-              onPressed: () {
-                // Tambahkan logika untuk toggle wishlist di sini
+              onPressed: () async {
+                final request = context.read<CookieRequest>();
+                final added = await wishlistProvider.toggleWishlist(
+                  request,
+                  restoEntry.pk,
+                );
+                
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      added ? 'Added to wishlist' : 'Removed from wishlist'
+                    ),
+                    duration: const Duration(seconds: 2),
+                  ),
+                );
               },
-              icon: const Icon(Icons.favorite_border),
-              color: Colors.brown,
+              icon: Icon(
+                wishlistProvider.wishlist.any((item) => 
+                  item.fields.restaurant == restoEntry.pk)
+                    ? Icons.favorite
+                    : Icons.favorite_border,
+                color: Colors.brown,
+              ),
             ),
           ),
         ],
