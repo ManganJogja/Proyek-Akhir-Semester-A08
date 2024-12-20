@@ -8,6 +8,7 @@ import 'package:mangan_jogja/reserve/screens/logout.dart';
 import 'package:mangan_jogja/reserve/screens/reservepage.dart';
 import 'package:mangan_jogja/widgets/bottom_navbar.dart';
 import 'package:mangan_jogja/widgets/drawer.dart';
+import 'package:mangan_jogja/wishlist/screens/wishlist_page.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 
 class EditReservationScreen extends StatefulWidget {
@@ -24,7 +25,7 @@ class _EditReservationScreenState extends State<EditReservationScreen> {
   int _currentIndex = 1;
   final List<Widget> _pages = [
     const MenuEntryPage(), // Home
-    const ReservedRestaurantsPage(), // Wishlist
+    const WishlistPage(), // Wishlist
     const ReservedRestaurantsPage(), // Reservation
     const ReservedRestaurantsPage(), // Orders
     const LoginApp(), // Logout
