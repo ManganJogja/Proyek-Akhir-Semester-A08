@@ -34,7 +34,7 @@ class _MenuEntryPageState extends State<MenuEntryPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Cuisines',
+          'Menus',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 24,

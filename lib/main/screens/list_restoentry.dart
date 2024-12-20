@@ -31,9 +31,21 @@ class _RestoEntryPageState extends State<RestoEntryPage> {
     final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('All Restaurants'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: const Text(
+          'Restaurants',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+            color: Color(0xFF28110A), 
+          ),
+        ),
       ),
-      drawer: const LeftDrawer(),
       body: FutureBuilder(
         future: fetchResto(request),
         builder: (context, AsyncSnapshot snapshot) {
@@ -99,7 +111,7 @@ class RestoCard extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text('Range Harga: Rp ${restoEntry.fields.rangeHarga}'),
                 const SizedBox(height: 8),
-                Text('Cuisine: ${restoEntry.fields.jenisKuliner}'),
+                Text('Cuisine: ${restoEntry.fields.jenisKuliner.toString().split('.').last}'),
                 const SizedBox(height: 8),
                 Text('Tingkat Keramaian Resto: ${restoEntry.fields.keramaianResto}'),
 
