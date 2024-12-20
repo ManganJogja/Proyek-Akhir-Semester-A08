@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mangan_jogja/reserve/screens/login.dart';
 import 'package:mangan_jogja/reserve/screens/register.dart';
-import 'package:mangan_jogja/widgets/drawer.dart';
 
 class StartPage extends StatefulWidget {
   @override
@@ -50,21 +49,10 @@ class _StartPageState extends State<StartPage> {
                 ],
               ),
             ),
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 16.0),
-                child: IconButton(
-                  icon: const Icon(Icons.menu, color: Color(0xFF3E190E)),
-                  onPressed: () {
-                    _scaffoldKey.currentState?.openEndDrawer();
-                  },
-                ),
-              ),
-            ],
+            
           ),
         ),
       ),
-      endDrawer: const LeftDrawer(),
       body: Center(
         child: SingleChildScrollView(
         child: Container(
@@ -241,14 +229,14 @@ class _StartPageState extends State<StartPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 50),
               Text(
                 'ManganJogja.  © 2024, PBP-A (A08)',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.aBeeZee(
-                  fontSize: 16,
+                  fontSize: 10,
                   fontWeight: FontWeight.w500,
-                  color: const Color.fromARGB(0, 0, 0, 10), // Warna teks sesuai tema
+                  color: const Color(0xFF3E190E), // Warna teks sesuai tema
                 ),
               ),
 

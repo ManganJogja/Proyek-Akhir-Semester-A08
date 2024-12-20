@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:mangan_jogja/menu.dart';
 import 'package:mangan_jogja/models/menu_entry.dart';
-import 'package:mangan_jogja/widgets/drawer.dart';
+import 'package:mangan_jogja/ordertakeaway/ordertakeaway_page.dart';
+import 'package:mangan_jogja/reserve/screens/login.dart';
+import 'package:mangan_jogja/reserve/screens/logout.dart';
+import 'package:mangan_jogja/reserve/screens/reservepage.dart';
 import 'package:mangan_jogja/widgets/bottom_navbar.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:mangan_jogja/main/screens/menu_detail.dart'; // Import halaman detail
+import 'package:mangan_jogja/wishlist/screens/wishlist_page.dart';
 
 class MenuEntryPage extends StatefulWidget {
   const MenuEntryPage({super.key});
@@ -14,6 +19,35 @@ class MenuEntryPage extends StatefulWidget {
 }
 
 class _MenuEntryPageState extends State<MenuEntryPage> {
+  int _currentIndex = 0;
+  final List<Widget> _pages = [
+    const MyHomePage(), // Home
+    const WishlistPage(), // Wishlist
+    const ReservedRestaurantsPage(), // Reservation
+    const OrderTakeawayPage(), // Orders
+    const LoginApp(), // Logout
+  ];
+
+  void _onItemTapped(int index) {
+    if (index == 4) {
+      // Logout logic
+      _performLogout();
+    } else {
+      // Navigasi ke halaman yang sesuai
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => _pages[index]),
+      );
+    }
+  }
+
+  Future<void> _performLogout() async {
+    bool success = await LogoutHandler.logoutUser(context);
+    if (success) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginApp()),
+      );
+    }
+  }
   Future<List<MenuEntry>> fetchMenu(CookieRequest request) async {
     final response = await request.get('http://127.0.0.1:8000/admin-dashboard/json/');
     var data = response;
@@ -33,6 +67,8 @@ class _MenuEntryPageState extends State<MenuEntryPage> {
     final token = request.cookies['csrftoken'];
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: true,
+        backgroundColor: const Color(0xFFDAC0A3),
         title: const Text(
           'Menus',
           style: TextStyle(
@@ -46,7 +82,6 @@ class _MenuEntryPageState extends State<MenuEntryPage> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      drawer: const LeftDrawer(),
       body: FutureBuilder(
         future: fetchMenu(request),
         builder: (context, AsyncSnapshot snapshot) {
@@ -123,6 +158,10 @@ class _MenuEntryPageState extends State<MenuEntryPage> {
             );
           }
         },
+      ),
+      bottomNavigationBar: BottomNav(
+        onItemTapped: _onItemTapped,
+        currentIndex: _currentIndex,
       ),
     );
   }

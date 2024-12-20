@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mangan_jogja/reserve/screens/login.dart';
 import 'package:flutter/material.dart';
-import 'package:mangan_jogja/widgets/drawer.dart';
 
 
 class RegisterPage extends StatefulWidget {
@@ -28,7 +27,7 @@ class _RegisterPageState extends State<RegisterPage> {
       final request = context.watch<CookieRequest>();
      return Scaffold(
       key: _scaffoldKey,
-    backgroundColor: const Color(0xFFE7DBC6),
+    backgroundColor: const Color(0xFFf6f6f6),
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60.0),
         child: ClipRRect(
@@ -60,21 +59,10 @@ class _RegisterPageState extends State<RegisterPage> {
                 ],
               ),
             ),
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 16.0),
-                child: IconButton(
-                  icon: const Icon(Icons.menu, color: Color(0xFF3E190E)),
-                  onPressed: () {
-                    _scaffoldKey.currentState?.openEndDrawer();
-                  },
-                ),
-              ),
-            ],
+            
           ),
         ),
       ),
-      endDrawer: const LeftDrawer(),
         body: Center(
           child: SingleChildScrollView(
             child: Form(
@@ -122,11 +110,35 @@ class _RegisterPageState extends State<RegisterPage> {
                       controller: _usernameController,
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: const Color(0xFFF8F0E5),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                          borderSide: BorderSide.none,
+                        fillColor: const Color.fromARGB(255, 255, 255, 255),
+                        enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                        borderSide: const BorderSide(
+                          color: Color(0xFFAD8262), // Warna border saat tidak fokus
+                          width: 2.0,
                         ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                        borderSide: const BorderSide(
+                          color: Color(0xFF3E190E), // Warna border saat fokus
+                          width: 2.0,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: const BorderSide(
+                  color: Color(0xFFAD8262),
+                  width: 2.0,
+                ),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: const BorderSide(
+                  color: Color(0xFF3E190E),
+                  width: 2.0,
+                ),
+              ),
                         contentPadding: const EdgeInsets.symmetric(
                           horizontal: 20.0,
                           vertical: 16.0,
@@ -165,11 +177,35 @@ class _RegisterPageState extends State<RegisterPage> {
                       controller: _passwordController,
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: const Color(0xFFF8F0E5),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                          borderSide: BorderSide.none,
+                        fillColor: const Color.fromARGB(255, 255, 255, 255),
+                        enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                        borderSide: const BorderSide(
+                          color: Color(0xFFAD8262), // Warna border saat tidak fokus
+                          width: 2.0,
                         ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                        borderSide: const BorderSide(
+                          color: Color(0xFF3E190E), // Warna border saat fokus
+                          width: 2.0,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: const BorderSide(
+                  color: Color(0xFFAD8262),
+                  width: 2.0,
+                ),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: const BorderSide(
+                  color: Color(0xFF3E190E),
+                  width: 2.0,
+                ),
+              ),
                         contentPadding: const EdgeInsets.symmetric(
                           horizontal: 20.0,
                           vertical: 16.0,
@@ -212,11 +248,35 @@ class _RegisterPageState extends State<RegisterPage> {
                       controller: _confirmPasswordController,
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: const Color(0xFFF8F0E5),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                          borderSide: BorderSide.none,
+                        fillColor: const Color.fromARGB(255, 255, 255, 255),
+                        enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                        borderSide: const BorderSide(
+                          color: Color(0xFFAD8262), // Warna border saat tidak fokus
+                          width: 2.0,
                         ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                        borderSide: const BorderSide(
+                          color: Color(0xFF3E190E), // Warna border saat fokus
+                          width: 2.0,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: const BorderSide(
+                  color: Color(0xFFAD8262),
+                  width: 2.0,
+                ),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: const BorderSide(
+                  color: Color(0xFF3E190E),
+                  width: 2.0,
+                ),
+              ),
                         contentPadding: const EdgeInsets.symmetric(
                           horizontal: 20.0,
                           vertical: 16.0,
