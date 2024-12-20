@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'ordertakeaway_form.dart';
 import 'ordertakeaway_edit.dart';
+import 'package:intl/intl.dart';
 
 class OrderTakeawayPage extends StatefulWidget {
   const OrderTakeawayPage({Key? key}) : super(key: key);
@@ -59,20 +60,22 @@ class _OrderTakeawayPageState extends State<OrderTakeawayPage> {
   }
 
   Future<List<dynamic>> fetchOrders(CookieRequest request) async {
-    try {
-      final response = await request.get('http://127.0.0.1:8000/order-takeaway/json/');
-      if (response is List) {
-        return _sortOrders(response);
-      } else if (response is String) {
-        return _sortOrders(jsonDecode(response));
-      } else {
-        throw Exception('Unexpected data format: ${response.runtimeType}');
-      }
-    } catch (e) {
-      print('Error fetching orders: $e');
-      return [];
+  try {
+    final timestamp = DateTime.now().millisecondsSinceEpoch; // Add a unique timestamp
+    final response = await request.get('http://127.0.0.1:8000/order-takeaway/json/?t=$timestamp');
+    if (response is List) {
+      return _sortOrders(response);
+    } else if (response is String) {
+      return _sortOrders(jsonDecode(response));
+    } else {
+      throw Exception('Unexpected data format: ${response.runtimeType}');
     }
+  } catch (e) {
+    print('Error fetching orders: $e');
+    return [];
   }
+}
+
 
   List<dynamic> _sortOrders(List<dynamic> orders) {
     // Sort based on menu name (A-Z or Z-A)
@@ -122,20 +125,31 @@ class _OrderTakeawayPageState extends State<OrderTakeawayPage> {
     });
   }
 
+  String formatTime(String time) {
+  try {
+    final parsedTime = DateFormat("HH:mm:ss").parse(time);
+    return DateFormat("hh:mm a").format(parsedTime); // Convert to 12-hour format with AM/PM
+  } catch (e) {
+    print('Error formatting time: $e');
+    return time; // Fallback to original format
+  }
+}
+
   @override
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
-          backgroundColor: const Color(0xFFDAC0A3),
+        backgroundColor: const Color(0xFFDAC0A3),
         title: const Text('Takeaway Orders'),
       ),
       body: Column(
         children: [
           // Filter Dropdown and Add Button Row
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -156,13 +170,17 @@ class _OrderTakeawayPageState extends State<OrderTakeawayPage> {
                 ),
                 // Add Order Button
                 ElevatedButton.icon(
-                  onPressed: () {
-                    Navigator.push(
+                  onPressed: () async {
+                    final result = await Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => const OrderTakeawayForm(),
                       ),
-                    ).then((_) => refreshOrders());
+                    );
+
+                    if (result == true) {
+                      refreshOrders(); // Trigger refresh if the result is true
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF6F4E37),
@@ -202,13 +220,15 @@ class _OrderTakeawayPageState extends State<OrderTakeawayPage> {
                       final fields = order['fields'];
 
                       final menuName = fields['menu_item'] ?? 'Unknown Menu';
-                      final restaurantName = fields['restaurant'] ?? 'Unknown Restaurant';
+                      final restaurantName =
+                          fields['restaurant'] ?? 'Unknown Restaurant';
                       final quantity = fields['quantity'] ?? 'Unknown Quantity';
                       final pickupTime = fields['pickup_time'];
                       final totalPrice = fields['total_price'];
 
                       return Container(
-                        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 16),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
@@ -256,7 +276,7 @@ class _OrderTakeawayPageState extends State<OrderTakeawayPage> {
                                 ),
                               ),
                               Text(
-                                'Pickup Time: $pickupTime',
+                                'Pickup Time: ${formatTime(pickupTime)}',
                                 style: const TextStyle(
                                   fontSize: 14,
                                   color: Colors.grey,
@@ -275,20 +295,22 @@ class _OrderTakeawayPageState extends State<OrderTakeawayPage> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               IconButton(
-                                icon: const Icon(Icons.edit, color: Colors.blue),
+                                icon:
+                                    const Icon(Icons.edit, color: Colors.blue),
                                 onPressed: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          OrderTakeawayEdit(orderId: order['pk']),
+                                      builder: (context) => OrderTakeawayEdit(
+                                          orderId: order['pk']),
                                     ),
                                   ).then((_) => refreshOrders());
                                 },
                                 tooltip: 'Edit Order',
                               ),
                               IconButton(
-                                icon: const Icon(Icons.delete, color: Colors.red),
+                                icon:
+                                    const Icon(Icons.delete, color: Colors.red),
                                 onPressed: () {
                                   deleteOrder(request, order['pk']);
                                 },

@@ -43,44 +43,50 @@ class _OrderTakeawayFormState extends State<OrderTakeawayForm> {
   }
 
   Future<void> submitOrder(CookieRequest request) async {
-    if (selectedMenu == null || selectedRestaurant == null || quantity == null || pickupTime == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill in all fields')),
-      );
-      return;
-    }
-
-    final body = jsonEncode({
-      'restaurant': selectedRestaurant,
-      'order_items': [
-        {'menu_item': selectedMenu, 'quantity': quantity}
-      ],
-      'pickup_time': '${pickupTime!.hour}:${pickupTime!.minute}:00',
-    });
-
-    print('Request JSON: $body'); // Debug log
-
-    try {
-      final response = await request.postJson(
-        'http://127.0.0.1:8000/order-takeaway/api/order/create/',
-        body,
-      );
-      print('Response: $response'); // Debug log
-
-      if (response['success'] == true) {
-        Navigator.pop(context);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to add order: ${response['message']}')),
-        );
-      }
-    } catch (e) {
-      print('Error adding order: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to add order.')),
-      );
-    }
+  if (selectedMenu == null || selectedRestaurant == null || quantity == null || pickupTime == null) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Please fill in all fields')),
+    );
+    return;
   }
+
+  final formattedTime = '${pickupTime!.hour.toString().padLeft(2, '0')}:${pickupTime!.minute.toString().padLeft(2, '0')}:00';
+
+  final body = jsonEncode({
+    'restaurant': selectedRestaurant,
+    'order_items': [
+      {'menu_item': selectedMenu, 'quantity': quantity}
+    ],
+    'pickup_time': formattedTime,
+  });
+
+  print('Request JSON: $body'); // Debug log
+
+  try {
+    final response = await request.postJson(
+      'http://127.0.0.1:8000/order-takeaway/api/order/create/',
+      body,
+    );
+    print('Response: $response'); // Debug log
+
+    if (response['success'] == true) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Order created successfully!')),
+      );
+      Navigator.pop(context, true); // Pass a success flag
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to add order: ${response['message']}')),
+      );
+    }
+  } catch (e) {
+    print('Error adding order: $e');
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Failed to add order.')),
+    );
+  }
+}
+
 
 
   @override
