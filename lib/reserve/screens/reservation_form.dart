@@ -7,6 +7,7 @@ import 'package:mangan_jogja/reserve/screens/login.dart';
 import 'package:mangan_jogja/reserve/screens/logout.dart';
 import 'package:mangan_jogja/reserve/screens/reservepage.dart';
 import 'package:mangan_jogja/widgets/bottom_navbar.dart';
+import 'package:mangan_jogja/widgets/drawer.dart';
 import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 
@@ -21,6 +22,7 @@ class ReservationPageForm extends StatefulWidget {
 
 class _ReservationPageState extends State<ReservationPageForm> {
   final _formKey = GlobalKey<FormState>();
+  
   bool _isLoading = false;
   
   // Tambahkan controller untuk field
@@ -73,24 +75,38 @@ class _ReservationPageState extends State<ReservationPageForm> {
   @override
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
-    return Scaffold(
-        backgroundColor: const Color(0xFFF6F6F6),
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-        backgroundColor: const Color(0xFFE7DBC6),
-        title: Text(
-          "Gudeg Yudjum",
-          style: GoogleFonts.mulish(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-            color: const Color(0xFF3E190E),
-          ),
+
+  return Scaffold(
+    backgroundColor: const Color(0xFFF6F6F6),
+    appBar: PreferredSize(
+      preferredSize: const Size.fromHeight(60.0),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(20.0),
+          bottomRight: Radius.circular(20.0),
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF3E190E)),
-          onPressed: () => Navigator.pop(context),
+        child: AppBar(
+          automaticallyImplyLeading: true,
+          backgroundColor: const Color(0xFFE7DBC6),
+          title: Text(
+            "ManganJogja.",
+            style: GoogleFonts.aDLaMDisplay(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: const Color(0xFF3E190E),
+              letterSpacing: 1.5,
+            ),
+          ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.person, color: Color(0xFF3E190E)),
+              onPressed: () {},
+            ),
+          ],
         ),
       ),
+    ),
+    drawer: const LeftDrawer(),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : Padding(
