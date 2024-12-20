@@ -3,6 +3,7 @@ import 'package:mangan_jogja/main/screens/list_menuentry.dart';
 import 'package:mangan_jogja/reserve/screens/login.dart';
 import 'package:mangan_jogja/reserve/screens/logout.dart';
 import 'package:mangan_jogja/reserve/screens/reservepage.dart';
+import 'package:mangan_jogja/wishlist/screens/wishlist_page.dart';
 
 class MainScaffold extends StatefulWidget {
   const MainScaffold({Key? key}) : super(key: key);
@@ -17,7 +18,7 @@ class _MainScaffoldState extends State<MainScaffold> {
   // List halaman yang akan ditampilkan
   final List<Widget> _pages = [
     const MenuEntryPage(),
-    const ReservedRestaurantsPage(),
+    const WishlistPage(),
     const ReservedRestaurantsPage(),
     const ReservedRestaurantsPage(),
     const LoginApp(), // Logout akan mengarahkan ke halaman login
@@ -35,7 +36,7 @@ Future<void> _onItemTapped(int index) async {
     case 1:
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => const ReservedRestaurantsPage()), // Wishlist
+        MaterialPageRoute(builder: (context) => const WishlistPage()), // Wishlist
       (route) => false,
       );
       break;

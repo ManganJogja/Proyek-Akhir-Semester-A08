@@ -3,6 +3,7 @@ import 'package:mangan_jogja/models/menu_entry.dart';
 import 'package:mangan_jogja/models/resto_entry.dart';
 import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:mangan_jogja/wishlist/providers/wishlist_provider.dart';
 
 class MenuDetailPage extends StatefulWidget {
   final MenuEntry menu;
@@ -160,12 +161,36 @@ class _MenuDetailPageState extends State<MenuDetailPage> {
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    IconButton(
-                                      icon: const Icon(Icons.favorite_border),
-                                      onPressed: () {
-                                        // Add to wishlist functionality
+                                    Consumer<WishlistProvider>(
+                                      builder: (context, wishlistProvider, child) {
+                                        return IconButton(
+                                          onPressed: () async {
+                                            final request = context.read<CookieRequest>();
+                                            final added = await wishlistProvider.toggleWishlist(
+                                              request,
+                                              resto.pk,
+                                            );
+                                            
+                                            if (context.mounted) {
+                                              ScaffoldMessenger.of(context).showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                    added ? 'Added to wishlist' : 'Removed from wishlist'
+                                                  ),
+                                                  duration: const Duration(seconds: 2),
+                                                ),
+                                              );
+                                            }
+                                          },
+                                          icon: Icon(
+                                            wishlistProvider.wishlist.any((item) => 
+                                              item.fields.restaurant == resto.pk)
+                                                ? Icons.favorite
+                                                : Icons.favorite_border,
+                                            color: const Color(0xFF4E342E),
+                                          ),
+                                        );
                                       },
-                                      color: const Color(0xFF4E342E),
                                     ),
                                   ],
                                 ),
