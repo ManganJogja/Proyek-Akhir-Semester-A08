@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mangan_jogja/main/screens/list_menuentry.dart';
+import 'package:mangan_jogja/menu.dart';
 import 'package:mangan_jogja/reserve/screens/login.dart';
 import 'package:mangan_jogja/reserve/screens/logout.dart';
 import 'package:mangan_jogja/reserve/screens/reservepage.dart';
@@ -17,7 +17,7 @@ class _MainScaffoldState extends State<MainScaffold> {
 
   // List halaman yang akan ditampilkan
   final List<Widget> _pages = [
-    const MenuEntryPage(),
+    const MyHomePage(),
     const WishlistPage(),
     const ReservedRestaurantsPage(),
     const ReservedRestaurantsPage(),
@@ -29,7 +29,7 @@ Future<void> _onItemTapped(int index) async {
     case 0:
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => const MenuEntryPage()),
+        MaterialPageRoute(builder: (context) => const MyHomePage()),
         (route) => false,
       );
       break;

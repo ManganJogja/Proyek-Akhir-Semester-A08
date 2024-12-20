@@ -88,8 +88,9 @@ class _OrderTakeawayFormState extends State<OrderTakeawayForm> {
     final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: true,
+        backgroundColor: const Color(0xFFDAC0A3),
         title: const Text('Create Order'),
-        backgroundColor: const Color(0xFF6F4E37),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

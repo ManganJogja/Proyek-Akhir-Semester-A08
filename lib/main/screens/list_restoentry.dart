@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mangan_jogja/models/resto_entry.dart';
 import 'package:mangan_jogja/reserve/screens/reservation_form.dart';
-import 'package:mangan_jogja/widgets/drawer.dart';
 import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:mangan_jogja/wishlist/models/wishlist_entry.dart'; // Import WishlistEntry
@@ -34,9 +33,10 @@ class _RestoEntryPageState extends State<RestoEntryPage> {
     final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: true,
+        backgroundColor: const Color(0xFFDAC0A3),
         title: const Text('All Restaurants'),
       ),
-      drawer: const LeftDrawer(),
       body: FutureBuilder(
         future: fetchResto(request),
         builder: (context, AsyncSnapshot snapshot) {

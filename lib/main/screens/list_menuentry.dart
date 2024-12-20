@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mangan_jogja/menu.dart';
 import 'package:mangan_jogja/models/menu_entry.dart';
 import 'package:mangan_jogja/reserve/screens/login.dart';
 import 'package:mangan_jogja/reserve/screens/logout.dart';
 import 'package:mangan_jogja/reserve/screens/reservepage.dart';
-import 'package:mangan_jogja/widgets/drawer.dart';
 import 'package:mangan_jogja/widgets/bottom_navbar.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +20,7 @@ class MenuEntryPage extends StatefulWidget {
 class _MenuEntryPageState extends State<MenuEntryPage> {
   int _currentIndex = 0;
   final List<Widget> _pages = [
-    const MenuEntryPage(), // Home
+    const MyHomePage(), // Home
     const WishlistPage(), // Wishlist
     const ReservedRestaurantsPage(), // Reservation
     const ReservedRestaurantsPage(), // Orders
@@ -66,6 +66,8 @@ class _MenuEntryPageState extends State<MenuEntryPage> {
     final token = request.cookies['csrftoken'];
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: true,
+        backgroundColor: const Color(0xFFDAC0A3),
         title: const Text(
           'Cuisines',
           style: TextStyle(
@@ -79,7 +81,6 @@ class _MenuEntryPageState extends State<MenuEntryPage> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      drawer: const LeftDrawer(),
       body: FutureBuilder(
         future: fetchMenu(request),
         builder: (context, AsyncSnapshot snapshot) {

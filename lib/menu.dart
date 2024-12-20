@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mangan_jogja/reserve/screens/login.dart';
+import 'package:mangan_jogja/reserve/screens/logout.dart';
+import 'package:mangan_jogja/reserve/screens/reservepage.dart';
 import 'package:mangan_jogja/widgets/bottom_navbar.dart';
-import 'package:mangan_jogja/widgets/drawer.dart';
+import 'package:mangan_jogja/wishlist/screens/wishlist_page.dart';
 import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:mangan_jogja/models/menu_entry.dart';
@@ -19,6 +22,34 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _currentIndex = 0;
+  final List<Widget> _pages = [
+    const MyHomePage(), // Home
+    const WishlistPage(), // Wishlist
+    const ReservedRestaurantsPage(), // Reservation
+    const ReservedRestaurantsPage(), // Orders
+    const LoginApp(), // Logout
+  ];
+
+  void _onItemTapped(int index) {
+    if (index == 4) {
+      // Logout logic
+      _performLogout();
+    } else {
+      // Navigasi ke halaman yang sesuai
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => _pages[index]),
+      );
+    }
+  }
+
+  Future<void> _performLogout() async {
+    bool success = await LogoutHandler.logoutUser(context);
+    if (success) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginApp()),
+      );
+    }
+  }
   String _searchQuery = '';
   List<MenuEntry> _menuList = [];
   List<RestoEntry> _restoList = [];
@@ -84,7 +115,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF6F6F6),
-      drawer: const LeftDrawer(),
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60.0),
         child: ClipRRect(
@@ -94,16 +124,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           child: AppBar(
             automaticallyImplyLeading: true,
-            leading: Builder(
-              builder: (BuildContext context) {
-                return IconButton(
-                  icon: const Icon(Icons.menu),
-                  onPressed: () {
-                    Scaffold.of(context).openDrawer();
-                  },
-                );
-              },
-            ),
             backgroundColor: const Color(0xFFDAC0A3),
             title: Row(
               children: [

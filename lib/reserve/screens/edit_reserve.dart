@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:mangan_jogja/main/screens/list_menuentry.dart';
+import 'package:mangan_jogja/menu.dart';
 import 'package:mangan_jogja/reserve/screens/login.dart';
 import 'package:mangan_jogja/reserve/screens/logout.dart';
 import 'package:mangan_jogja/reserve/screens/reservepage.dart';
 import 'package:mangan_jogja/widgets/bottom_navbar.dart';
-import 'package:mangan_jogja/widgets/drawer.dart';
 import 'package:mangan_jogja/wishlist/screens/wishlist_page.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 
@@ -22,9 +22,9 @@ class EditReservationScreen extends StatefulWidget {
 
 class _EditReservationScreenState extends State<EditReservationScreen> {
   final _formKey = GlobalKey<FormState>();
-  int _currentIndex = 1;
+  int _currentIndex = 2;
   final List<Widget> _pages = [
-    const MenuEntryPage(), // Home
+    const MyHomePage(), // Home
     const WishlistPage(), // Wishlist
     const ReservedRestaurantsPage(), // Reservation
     const ReservedRestaurantsPage(), // Orders
@@ -78,7 +78,6 @@ Future<void> _fetchReservationDetails(CookieRequest request) async {
     final dynamic data = await request.get(
       'http://127.0.0.1:8000/reserve/json/${widget.reservationId}/',
     );
-    print(data);
     // Django returns a list with one item, so we need to access the first item's fields
     if (data != null && data is List && data.isNotEmpty) {
       final fields = data[0]['fields'] ?? {};
@@ -97,8 +96,7 @@ Future<void> _fetchReservationDetails(CookieRequest request) async {
       ));
     }
   } catch (e, stackTrace) {
-    print('Error fetching reservation details: $e');
-    print('Stack trace: $stackTrace');
+   
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text('Error fetching details: $e'),
       backgroundColor: Colors.red,
@@ -134,7 +132,6 @@ Future<void> _updateReservation(CookieRequest request) async {
       jsonEncode(postData),  
       
     );
-  print('Response: ${response.statusCode}, ${response.body}');
 
   } catch (e, stackTrace) {
     setState(() {
@@ -156,7 +153,7 @@ Future<void> _updateReservation(CookieRequest request) async {
         ),
         child: AppBar(
           automaticallyImplyLeading: true,
-          backgroundColor: const Color(0xFFE7DBC6),
+          backgroundColor: const Color(0xFFDAC0A3),
           title: Text(
             "ManganJogja.",
             style: GoogleFonts.aDLaMDisplay(
@@ -175,7 +172,6 @@ Future<void> _updateReservation(CookieRequest request) async {
         ),
       ),
     ),
-    drawer: const LeftDrawer(),
       body: SingleChildScrollView(
     child:Padding(
         padding: const EdgeInsets.all(16.0),

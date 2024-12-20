@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:mangan_jogja/main/screens/list_menuentry.dart';
+import 'package:mangan_jogja/menu.dart';
 import 'package:mangan_jogja/reserve/screens/login.dart';
 import 'package:mangan_jogja/reserve/screens/logout.dart';
 import 'package:mangan_jogja/reserve/screens/reservepage.dart';
 import 'package:mangan_jogja/widgets/bottom_navbar.dart';
-import 'package:mangan_jogja/widgets/drawer.dart';
 import 'package:mangan_jogja/wishlist/screens/wishlist_page.dart';
 import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -43,9 +43,9 @@ class _ReservationPageState extends State<ReservationPageForm> {
   int _phone = 0;
   int _guestQuantity = 0;
   String _notes = "";
-  int _currentIndex = 1;
+  int _currentIndex = 2;
   final List<Widget> _pages = [
-    const MenuEntryPage(), // Home
+    const MyHomePage(), // Home
     const WishlistPage(), // Wishlist
     const ReservedRestaurantsPage(), // Reservation
     const ReservedRestaurantsPage(), // Orders
@@ -88,7 +88,7 @@ class _ReservationPageState extends State<ReservationPageForm> {
         ),
         child: AppBar(
           automaticallyImplyLeading: true,
-          backgroundColor: const Color(0xFFE7DBC6),
+          backgroundColor: const Color(0xFFDAC0A3),
           title: Text(
             "ManganJogja.",
             style: GoogleFonts.aDLaMDisplay(
@@ -107,7 +107,6 @@ class _ReservationPageState extends State<ReservationPageForm> {
         ),
       ),
     ),
-    drawer: const LeftDrawer(),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : Padding(

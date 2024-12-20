@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:mangan_jogja/main/screens/list_menuentry.dart';
+import 'package:mangan_jogja/menu.dart';
 import 'package:mangan_jogja/models/resto_entry.dart';
 import 'package:mangan_jogja/reserve/models/reserve_entry.dart';
 import 'package:mangan_jogja/reserve/screens/edit_reserve.dart';
 import 'package:mangan_jogja/reserve/screens/login.dart';
 import 'package:mangan_jogja/reserve/screens/logout.dart';
 import 'package:mangan_jogja/widgets/bottom_navbar.dart';
-import 'package:mangan_jogja/widgets/drawer.dart';
 import 'package:mangan_jogja/wishlist/screens/wishlist_page.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
@@ -24,9 +24,9 @@ class ReservedRestaurantsPage extends StatefulWidget {
 
 class _ReservedRestaurantsPageState extends State<ReservedRestaurantsPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  int _currentIndex = 1;
+  int _currentIndex = 2;
   final List<Widget> _pages = [
-    const MenuEntryPage(), // Home
+    const MyHomePage(), // Home
     const WishlistPage(), // Wishlist
     const ReservedRestaurantsPage(), // Reservation
     const ReservedRestaurantsPage(), // Orders
@@ -101,7 +101,7 @@ Widget build(BuildContext context) {
         ),
         child: AppBar(
           automaticallyImplyLeading: true,
-          backgroundColor: const Color(0xFFE7DBC6),
+          backgroundColor: const Color(0xFFDAC0A3),
           title: Text(
             "ManganJogja.",
             style: GoogleFonts.aDLaMDisplay(
@@ -120,7 +120,6 @@ Widget build(BuildContext context) {
         ),
       ),
     ),
-    drawer: const LeftDrawer(),
     body: Column(
   crossAxisAlignment: CrossAxisAlignment.center,
   children: [

@@ -91,8 +91,9 @@ class _OrderTakeawayPageState extends State<OrderTakeawayPage> {
     final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: true,
+          backgroundColor: const Color(0xFFDAC0A3),
         title: const Text('Takeaway Orders'),
-        backgroundColor: const Color(0xFF6F4E37),
       ),
       body: Column(
         children: [

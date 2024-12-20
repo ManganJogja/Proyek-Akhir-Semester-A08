@@ -24,7 +24,7 @@ class _WishlistPageState extends State<WishlistPage> {
   int _currentIndex = 1;
 
   final List<Widget> _pages = [
-    const MenuEntryPage(), // Home
+    const MyHomePage(), // Home
     const WishlistPage(), // Wishlist
     const ReservedRestaurantsPage(), // Reservation
     const ReservedRestaurantsPage(), // Orders

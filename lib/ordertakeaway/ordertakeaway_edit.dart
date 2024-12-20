@@ -123,8 +123,9 @@ class _OrderTakeawayEditState extends State<OrderTakeawayEdit> {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: true,
+        backgroundColor: const Color(0xFFDAC0A3),
         title: const Text('Edit Order'),
-        backgroundColor: const Color(0xFF6F4E37),
       ),
       body: _menus.isEmpty
           ? const Center(child: CircularProgressIndicator())

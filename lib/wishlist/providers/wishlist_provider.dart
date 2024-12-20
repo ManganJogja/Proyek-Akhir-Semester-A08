@@ -12,8 +12,7 @@ class WishlistProvider extends ChangeNotifier {
   Future<void> fetchWishlist(CookieRequest request) async {
     try {
       final response = await request.get('http://127.0.0.1:8000/wishlist/json/');
-      print('Fetch response:');
-      print(response);
+      
       
       if (response is List) {
         _wishlist = wishlistFromJson(jsonEncode(response));

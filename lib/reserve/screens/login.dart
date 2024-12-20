@@ -1,5 +1,6 @@
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mangan_jogja/main/screens/list_menuentry.dart';
+import 'package:mangan_jogja/menu.dart';
 import 'package:mangan_jogja/reserve/screens/register.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -276,7 +277,7 @@ class _LoginPageState extends State<LoginPage> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => MenuEntryPage()),
+                            builder: (context) => MyHomePage()),
                       );
                       ScaffoldMessenger.of(context)
                         ..hideCurrentSnackBar()
@@ -295,7 +296,7 @@ class _LoginPageState extends State<LoginPage> {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => MenuEntryPage()),
+                                builder: (context) => MyHomePage()),
                           );
                         } 
                         

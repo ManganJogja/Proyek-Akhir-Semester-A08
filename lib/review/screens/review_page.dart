@@ -6,7 +6,6 @@ import 'package:mangan_jogja/review/screens/review_form.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
-import 'package:mangan_jogja/widgets/drawer.dart';
 import 'package:http/http.dart' as http;
 import 'package:mangan_jogja/reserve/screens/login.dart';
 import 'package:mangan_jogja/widgets/bottom_navbar.dart';
@@ -440,7 +439,6 @@ Widget buildAddReviewButton(BuildContext context) {
   backgroundColor: backgroundColor, // Ganti warna background jadi sama dengan body
   elevation: 0,
 ),
-      drawer: const LeftDrawer(),
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
