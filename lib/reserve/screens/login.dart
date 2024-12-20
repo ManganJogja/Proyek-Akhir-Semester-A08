@@ -1,8 +1,7 @@
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mangan_jogja/menu.dart';
+import 'package:mangan_jogja/main/screens/list_menuentry.dart';
 import 'package:mangan_jogja/reserve/screens/register.dart';
 import 'package:flutter/material.dart';
-import 'package:mangan_jogja/widgets/drawer.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
@@ -39,6 +38,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _formKey = GlobalKey<FormState>(); 
 
   Color _registerNowColor = const Color(0xFF3E190E);
   Color _loginButtonNowColor = const Color(0xFFDAC0A3); 
@@ -49,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: const Color(0xFFE7DBC6),
+      backgroundColor: const Color(0xFFF6F6F6),
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60.0),
         child: ClipRRect(
@@ -81,23 +81,14 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 16.0),
-                child: IconButton(
-                  icon: const Icon(Icons.menu, color: Color(0xFF3E190E)),
-                  onPressed: () {
-                    _scaffoldKey.currentState?.openEndDrawer();
-                  },
-                ),
-              ),
-            ],
+            
           ),
         ),
       ),
-      endDrawer: const LeftDrawer(),
       body: Center(
         child: SingleChildScrollView(
+          child: Form(
+          key: _formKey, 
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -136,20 +127,51 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 10.0),
               Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40.0), 
-              child: TextField(
+              child: TextFormField(
                 controller: _usernameController,
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: const Color(0xFFF8F0E5),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
-                    borderSide: BorderSide.none,
+                  fillColor: const Color.fromARGB(255, 255, 255, 255),
+                  enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25.0),
+                  borderSide: const BorderSide(
+                    color: Color(0xFFAD8262), 
+                    width: 2.0,
                   ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25.0),
+                  borderSide: const BorderSide(
+                    color: Color(0xFF3E190E), 
+                    width: 2.0,
+                  ),
+                ),
+                 errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25.0),
+                  borderSide: const BorderSide(
+                    color: Color(0xFFAD8262),
+                    width: 2.0,
+                  ),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25.0),
+                  borderSide: const BorderSide(
+                    color: Color(0xFF3E190E),
+                    width: 2.0,
+                  ),
+                ),
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 20.0,
                     vertical: 16.0,
                   ),
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your username';
+                  }
+                  return null;
+                  
+                },
               ),
               ),
               const SizedBox(height: 25.0),
@@ -171,21 +193,53 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 10.0),
               Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40.0), 
-              child: TextField(
+              child: TextFormField(
                 controller: _passwordController,
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: const Color(0xFFF8F0E5),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
-                    borderSide: BorderSide.none,
+                  fillColor: const Color.fromARGB(255, 255, 255, 255),
+                  enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25.0),
+                  borderSide: const BorderSide(
+                    color: Color(0xFFAD8262), 
+                    width: 2.0,
                   ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25.0),
+                  borderSide: const BorderSide(
+                    color: Color(0xFF3E190E), 
+                    width: 2.0,
+                  ),
+                ),
+                 errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: const BorderSide(
+                  color: Color(0xFFAD8262),
+                  width: 2.0,
+                ),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: const BorderSide(
+                  color: Color(0xFF3E190E),
+                  width: 2.0,
+                ),
+              ),
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 20.0,
                     vertical: 16.0,
                   ),
                 ),
                 obscureText: true,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your password';
+                  }
+                  return null;
+                  
+                  
+                },
               ),
               ),
               const SizedBox(height: 25.0),
@@ -205,6 +259,7 @@ class _LoginPageState extends State<LoginPage> {
                 },
               child: ElevatedButton(
                 onPressed: () async {
+                  if (_formKey.currentState?.validate() ?? false) {
                   String username = _usernameController.text;
                   String password = _passwordController.text;
 
@@ -221,7 +276,7 @@ class _LoginPageState extends State<LoginPage> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => MyHomePage()),
+                            builder: (context) => MenuEntryPage()),
                       );
                       ScaffoldMessenger.of(context)
                         ..hideCurrentSnackBar()
@@ -230,24 +285,21 @@ class _LoginPageState extends State<LoginPage> {
                               content: Text("$message Selamat datang, $uname.")),
                         );
                     }
-                  } else {
-                    if (context.mounted) {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text('Login Gagal'),
-                          content: Text(response['message']),
-                          actions: [
-                            TextButton(
-                              child: const Text('OK'),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
+                  } if (context.mounted) {
+                        if (response['status'] == 'success') {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Successfully Login!'),
                             ),
-                          ],
-                        ),
-                      );
-                    }
+                          );
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MenuEntryPage()),
+                          );
+                        } 
+                        
+                      }
                   }
                 },
                 style: ElevatedButton.styleFrom(
@@ -386,6 +438,7 @@ class _LoginPageState extends State<LoginPage> {
           
           ],   
           ),
+        ),
         ),
       ),
     );

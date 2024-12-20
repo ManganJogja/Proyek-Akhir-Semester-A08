@@ -1,50 +1,138 @@
 import 'package:flutter/material.dart';
+import 'package:mangan_jogja/main/screens/list_menuentry.dart';
+import 'package:mangan_jogja/reserve/screens/login.dart';
+import 'package:mangan_jogja/reserve/screens/logout.dart';
+import 'package:mangan_jogja/reserve/screens/reservepage.dart';
+import 'package:mangan_jogja/wishlist/screens/wishlist_page.dart';
 
-class BottomNav extends StatefulWidget {
-  final Function(int) onItemTapped; // Callback untuk mengubah halaman
-  final int currentIndex; // Indeks halaman aktif
-
-  const BottomNav({
-    super.key,
-    required this.onItemTapped,
-    required this.currentIndex,
-  });
+class MainScaffold extends StatefulWidget {
+  const MainScaffold({Key? key}) : super(key: key);
 
   @override
-  _BottomNavState createState() => _BottomNavState();
+  _MainScaffoldState createState() => _MainScaffoldState();
 }
 
-class _BottomNavState extends State<BottomNav> {
+class _MainScaffoldState extends State<MainScaffold> {
+  int _currentIndex = 0;
+
+  // List halaman yang akan ditampilkan
+  final List<Widget> _pages = [
+    const MenuEntryPage(),
+    const WishlistPage(),
+    const ReservedRestaurantsPage(),
+    const ReservedRestaurantsPage(),
+    const LoginApp(), // Logout akan mengarahkan ke halaman login
+  ];
+
+Future<void> _onItemTapped(int index) async {
+  switch (index) {
+    case 0:
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const MenuEntryPage()),
+        (route) => false,
+      );
+      break;
+    case 1:
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const WishlistPage()), // Wishlist
+      (route) => false,
+      );
+      break;
+    case 2:
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const ReservedRestaurantsPage()),
+        (route) => false, // Reservation
+      );
+      break;
+    case 3:
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const ReservedRestaurantsPage()), // Orders
+      (route) => false,
+      );
+      break;
+    case 4:
+      bool success = await LogoutHandler.logoutUser(context);
+      if (success) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginApp()),
+        (route) => false,
+        );
+      }
+      break;
+  }
+}
+
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed, // Tetap untuk lebih dari 3 item
-      currentIndex: widget.currentIndex, // Indeks aktif
-      selectedItemColor: const Color(0xFF8b6c5c), // Warna item aktif
-      unselectedItemColor: Colors.grey, // Warna item tidak aktif
-      onTap: widget.onItemTapped, // Panggil fungsi saat item ditekan
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
+    return Scaffold(
+      body: _pages[_currentIndex], // Tampilkan halaman sesuai indeks saat ini
+      bottomNavigationBar: BottomNav(
+        currentIndex: _currentIndex,
+        onItemTapped: _onItemTapped,
+      ),
+    );
+  }
+}
+
+class BottomNav extends StatelessWidget {
+  final Function(int) onItemTapped;
+  final int currentIndex;
+
+  const BottomNav({
+    Key? key,
+    required this.onItemTapped,
+    required this.currentIndex,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(20.0),
+        topRight: Radius.circular(20.0),
+      ),
+      child: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: const Color(0xFF8b6c5c),
+        unselectedItemColor: Colors.grey,
+        selectedIconTheme: IconThemeData(
+          color: const Color(0xFF8b6c5c),
+          size: 30,
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.favorite_border),
-          label: 'Wishlist',
+        unselectedIconTheme: IconThemeData(
+          color: Colors.grey,
+          size: 24,
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.table_bar),
-          label: 'Reservation',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.shopping_basket),
-          label: 'Orders',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.logout),
-          label: 'Logout',
-        ),
-      ],
+        onTap: onItemTapped,
+        currentIndex: currentIndex,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite_border),
+            label: 'Wishlist',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.table_bar),
+            label: 'Reservation',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_basket),
+            label: 'Orders',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.logout),
+            label: 'Logout',
+          ),
+        ],
+      ),
     );
   }
 }

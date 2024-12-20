@@ -152,6 +152,14 @@ class _EditWishlistPageState extends State<EditWishlistPage> {
                           hintText: 'Enter your notes here',
                         ),
                         maxLines: 3,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter some notes';
+                          } else if (value.length < 8) {
+                            return 'Notes must be at least 8 characters long';
+                          }
+                          return null;
+                        },
                       ),
                     ),
                     

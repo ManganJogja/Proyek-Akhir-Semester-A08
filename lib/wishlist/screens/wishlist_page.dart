@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:mangan_jogja/wishlist/screens/add_wishlist.dart';
 import 'package:provider/provider.dart';
 import '../providers/wishlist_provider.dart'; // Import WishlistProvider
 import 'package:intl/intl.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'edit_wishlist.dart';
 import 'package:mangan_jogja/menu.dart'; // Import MyHomePage
+import 'package:mangan_jogja/widgets/bottom_navbar.dart';
+import 'package:mangan_jogja/reserve/screens/logout.dart';
+import 'package:mangan_jogja/reserve/screens/login.dart';
+import 'package:mangan_jogja/main/screens/list_menuentry.dart';
+import 'package:mangan_jogja/reserve/screens/reservepage.dart';
+
 
 class WishlistPage extends StatefulWidget {
   const WishlistPage({super.key});
@@ -16,6 +21,15 @@ class WishlistPage extends StatefulWidget {
 
 class _WishlistPageState extends State<WishlistPage> {
   String _sortMethod = 'name_asc';
+  int _currentIndex = 1;
+
+  final List<Widget> _pages = [
+    const MenuEntryPage(), // Home
+    const WishlistPage(), // Wishlist
+    const ReservedRestaurantsPage(), // Reservation
+    const ReservedRestaurantsPage(), // Orders
+    const LoginApp(), // Logout
+  ];
 
   void _sortWishlist() {
     final provider = Provider.of<WishlistProvider>(context, listen: false);
@@ -37,6 +51,19 @@ class _WishlistPageState extends State<WishlistPage> {
     });
   }
 
+  void _onItemTapped(int index) {
+    if (index == 4) {
+      // Logout logic
+      _performLogout();
+    } else {
+      // Directly navigate to the selected page
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => _pages[index]),
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -44,6 +71,15 @@ class _WishlistPageState extends State<WishlistPage> {
       final request = context.read<CookieRequest>();
       context.read<WishlistProvider>().fetchWishlist(request);
     });
+  }
+
+  Future<void> _performLogout() async {
+    bool success = await LogoutHandler.logoutUser(context);
+    if (success) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginApp()),
+      );
+    }
   }
 
   @override
@@ -266,6 +302,15 @@ class _WishlistPageState extends State<WishlistPage> {
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: BottomNav(
+        onItemTapped: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+          _onItemTapped(index);
+        },
+        currentIndex: _currentIndex,
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mangan_jogja/models/resto_entry.dart';
+import 'package:mangan_jogja/reserve/screens/reservation_form.dart';
 import 'package:mangan_jogja/widgets/drawer.dart';
 import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -126,7 +127,16 @@ class RestoCard extends StatelessWidget {
                     // Tombol "Make Reservation" di kanan
                     ElevatedButton(
                       onPressed: () {
-                        // Tambahkan logika untuk tombol "Make Reservation" di sini
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ReservationPageForm(
+                              
+                              restoId: restoEntry.pk, 
+                              // Pass the restaurant ID
+                            ),
+                          ),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF4E342E), // Warna cokelat gelap
