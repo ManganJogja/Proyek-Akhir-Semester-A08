@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mangan_jogja/models/menu_entry.dart';
 import 'package:mangan_jogja/models/resto_entry.dart';
+import 'package:mangan_jogja/reserve/screens/reservation_form.dart';
+import 'package:mangan_jogja/review/screens/review_page.dart';
 import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:mangan_jogja/wishlist/providers/wishlist_provider.dart';
@@ -225,7 +227,12 @@ class _MenuDetailPageState extends State<MenuDetailPage> {
                                   children: [
                                     TextButton(
                                       onPressed: () {
-                                        // Add click to see reviews functionality
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => ReviewPage(restaurantId: resto.pk, restaurantName: resto.fields.namaResto)
+                                          ),
+                                        );
                                       },
                                       child: const Text(
                                         'Click to See Reviews',
@@ -237,7 +244,12 @@ class _MenuDetailPageState extends State<MenuDetailPage> {
                                     ),
                                     ElevatedButton(
                                       onPressed: () {
-                                        // Add make reservation functionality
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>  ReservationPageForm(restoId: resto.pk),
+                                          ),
+                                        );
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: const Color(0xFF4E342E),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mangan_jogja/menu.dart';
+import 'package:mangan_jogja/ordertakeaway/ordertakeaway_page.dart';
 import 'package:mangan_jogja/reserve/screens/login.dart';
 import 'package:mangan_jogja/reserve/screens/logout.dart';
 import 'package:mangan_jogja/reserve/screens/reservepage.dart';
@@ -20,7 +21,7 @@ class _MainScaffoldState extends State<MainScaffold> {
     const MyHomePage(),
     const WishlistPage(),
     const ReservedRestaurantsPage(),
-    const ReservedRestaurantsPage(),
+    const OrderTakeawayPage(),
     const LoginApp(), // Logout akan mengarahkan ke halaman login
   ];
 
@@ -50,7 +51,7 @@ Future<void> _onItemTapped(int index) async {
     case 3:
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => const ReservedRestaurantsPage()), // Orders
+        MaterialPageRoute(builder: (context) => const OrderTakeawayPage()), // Orders
       (route) => false,
       );
       break;

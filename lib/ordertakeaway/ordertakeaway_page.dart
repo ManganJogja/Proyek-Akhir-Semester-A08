@@ -1,5 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:mangan_jogja/menu.dart';
+import 'package:mangan_jogja/reserve/screens/login.dart';
+import 'package:mangan_jogja/reserve/screens/logout.dart';
+import 'package:mangan_jogja/reserve/screens/reservepage.dart';
+import 'package:mangan_jogja/widgets/bottom_navbar.dart';
+import 'package:mangan_jogja/wishlist/screens/wishlist_page.dart';
 import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'ordertakeaway_form.dart';
@@ -13,6 +19,36 @@ class OrderTakeawayPage extends StatefulWidget {
 }
 
 class _OrderTakeawayPageState extends State<OrderTakeawayPage> {
+  int _currentIndex = 3;
+  final List<Widget> _pages = [
+    const MyHomePage(), // Home
+    const WishlistPage(), // Wishlist
+    const ReservedRestaurantsPage(), // Reservation
+    const OrderTakeawayPage(), // Orders
+    const LoginApp(), // Logout
+  ];
+
+  void _onItemTapped(int index) {
+    if (index == 4) {
+      // Logout logic
+      _performLogout();
+    } else {
+      // Navigasi ke halaman yang sesuai
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => _pages[index]),
+      );
+    }
+  }
+
+  Future<void> _performLogout() async {
+    bool success = await LogoutHandler.logoutUser(context);
+    if (success) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginApp()),
+      );
+    }
+  }
+
   late Future<List<dynamic>> _ordersFuture;
   String _currentFilter = "A-Z"; // Default filter option
 
@@ -269,6 +305,10 @@ class _OrderTakeawayPageState extends State<OrderTakeawayPage> {
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: BottomNav(
+        onItemTapped: _onItemTapped,
+        currentIndex: _currentIndex,
       ),
     );
   }

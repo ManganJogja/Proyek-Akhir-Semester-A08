@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mangan_jogja/ordertakeaway/ordertakeaway_page.dart';
 import 'package:mangan_jogja/reserve/screens/login.dart';
 import 'package:mangan_jogja/reserve/screens/logout.dart';
 import 'package:mangan_jogja/reserve/screens/reservepage.dart';
@@ -26,7 +27,7 @@ class _MyHomePageState extends State<MyHomePage> {
     const MyHomePage(), // Home
     const WishlistPage(), // Wishlist
     const ReservedRestaurantsPage(), // Reservation
-    const ReservedRestaurantsPage(), // Orders
+    const OrderTakeawayPage(), // Orders
     const LoginApp(), // Logout
   ];
 

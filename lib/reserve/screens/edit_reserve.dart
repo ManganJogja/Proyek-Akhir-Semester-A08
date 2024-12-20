@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:mangan_jogja/main/screens/list_menuentry.dart';
 import 'package:mangan_jogja/menu.dart';
+import 'package:mangan_jogja/ordertakeaway/ordertakeaway_page.dart';
 import 'package:mangan_jogja/reserve/screens/login.dart';
 import 'package:mangan_jogja/reserve/screens/logout.dart';
 import 'package:mangan_jogja/reserve/screens/reservepage.dart';
@@ -27,7 +28,7 @@ class _EditReservationScreenState extends State<EditReservationScreen> {
     const MyHomePage(), // Home
     const WishlistPage(), // Wishlist
     const ReservedRestaurantsPage(), // Reservation
-    const ReservedRestaurantsPage(), // Orders
+    const OrderTakeawayPage(), // Orders
     const LoginApp(), // Logout
   ];
 

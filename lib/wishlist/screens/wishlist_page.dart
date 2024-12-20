@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mangan_jogja/ordertakeaway/ordertakeaway_page.dart';
 import 'package:provider/provider.dart';
 import '../providers/wishlist_provider.dart'; // Import WishlistProvider
 import 'package:intl/intl.dart';
@@ -27,7 +28,7 @@ class _WishlistPageState extends State<WishlistPage> {
     const MyHomePage(), // Home
     const WishlistPage(), // Wishlist
     const ReservedRestaurantsPage(), // Reservation
-    const ReservedRestaurantsPage(), // Orders
+    const OrderTakeawayPage(), // Orders
     const LoginApp(), // Logout
   ];
 

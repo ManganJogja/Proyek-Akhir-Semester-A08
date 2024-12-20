@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mangan_jogja/menu.dart';
 import 'package:mangan_jogja/models/menu_entry.dart';
+import 'package:mangan_jogja/ordertakeaway/ordertakeaway_page.dart';
 import 'package:mangan_jogja/reserve/screens/login.dart';
 import 'package:mangan_jogja/reserve/screens/logout.dart';
 import 'package:mangan_jogja/reserve/screens/reservepage.dart';
@@ -23,7 +24,7 @@ class _MenuEntryPageState extends State<MenuEntryPage> {
     const MyHomePage(), // Home
     const WishlistPage(), // Wishlist
     const ReservedRestaurantsPage(), // Reservation
-    const ReservedRestaurantsPage(), // Orders
+    const OrderTakeawayPage(), // Orders
     const LoginApp(), // Logout
   ];
 

@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:mangan_jogja/main/screens/list_menuentry.dart';
 import 'package:mangan_jogja/menu.dart';
 import 'package:mangan_jogja/models/resto_entry.dart';
+import 'package:mangan_jogja/ordertakeaway/ordertakeaway_page.dart';
 import 'package:mangan_jogja/reserve/models/reserve_entry.dart';
 import 'package:mangan_jogja/reserve/screens/edit_reserve.dart';
 import 'package:mangan_jogja/reserve/screens/login.dart';
@@ -29,7 +30,7 @@ class _ReservedRestaurantsPageState extends State<ReservedRestaurantsPage> {
     const MyHomePage(), // Home
     const WishlistPage(), // Wishlist
     const ReservedRestaurantsPage(), // Reservation
-    const ReservedRestaurantsPage(), // Orders
+    const OrderTakeawayPage(), // Orders
     const LoginApp(), // Logout
   ];
 
