@@ -118,204 +118,264 @@ class _MyHomePageState extends State<MyHomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Top Banner with Gradient
-            Container(
-              width: double.infinity,
-              height: 200,
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Color(0xFF3E2723),
-                    Color(0xFF8B4513),
-                  ],
-                ),
-              ),
-              child: Stack(
-                children: [
-                  Positioned(
-                    left: 20,
-                    top: 40,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Ready to Explore Jogja\'s',
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const Text(
-                          'Culinary Delight?',
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const SizedBox(height: 20),
+            // Stack untuk menggabungkan AppBar dan Banner gradient
+            Stack(
+              children: [
+                // Banner gradient yang dinaikkan posisinya untuk menghilangkan gap putih
+                Container(
+                  width: double.infinity,
+                  height: 260, // Tinggi ditambah untuk overlap dengan AppBar
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color(0xFF3E2723),
+                        Color(0xFF8B4513),
                       ],
                     ),
                   ),
-                ],
-              ),
+                  padding: const EdgeInsets.only(top: 30), // Padding untuk konten
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        left: 20,
+                        top: 40,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Ready to Explore Jogja\'s',
+                              style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const Text(
+                              'Culinary Delight?',
+                              style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
             
-            // Content Container with white background and rounded corners
-            Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
-                ),
-              ),
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Search Bar
-                  TextField(
-                    onChanged: _handleSearch,
-                    decoration: InputDecoration(
-                      hintText: 'Search menus or restaurants...',
-                      prefixIcon: const Icon(Icons.search),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      filled: true,
-                      fillColor: Colors.white,
-                    ),
+            // Content Container dengan latar belakang putih dan sudut melengkung
+            Transform.translate(
+              offset: const Offset(0, -30), // Geser ke atas untuk overlap dengan gradient
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
                   ),
-
-                  if (_isSearching) ...[
-                    // Search Results
-                    const SizedBox(height: 20),
-                    Text(
-                      'Menu Results',
-                      style: Theme.of(context).textTheme.titleLarge,
+                ),
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Search Bar
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(30),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.2),
+                            spreadRadius: 2,
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: TextField(
+                        onChanged: _handleSearch,
+                        decoration: InputDecoration(
+                          hintText: 'Search menus or restaurants...',
+                          prefixIcon: const Icon(Icons.search),
+                          border: InputBorder.none,
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                      ),
                     ),
-                    if (_filteredMenus.isEmpty)
-                      const Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: Text('No menu items found'),
-                      )
-                    else
+
+                    if (_isSearching) ...[
+                      // Search Results
+                      const SizedBox(height: 20),
+                      Text(
+                        'Menu Results',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      if (_filteredMenus.isEmpty)
+                        const Padding(
+                          padding: EdgeInsets.all(16.0),
+                          child: Text('No menu items found'),
+                        )
+                      else
+                        Container(
+                          height: 220,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: _filteredMenus.length,
+                            itemBuilder: (context, index) => Container(
+                              width: 150,
+                              margin: const EdgeInsets.only(right: 16),
+                              child: _buildMenuCard(_filteredMenus[index]),
+                            ),
+                          ),
+                        ),
+
+                      const SizedBox(height: 20),
+                      Text(
+                        'Restaurant Results',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      if (_filteredRestos.isEmpty)
+                        const Padding(
+                          padding: EdgeInsets.all(16.0),
+                          child: Text('No restaurants found'),
+                        )
+                      else
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: _filteredRestos.length,
+                          itemBuilder: (context, index) => _buildRestoCard(_filteredRestos[index]),
+                        ),
+                    ] else ...[
+                      // Popular Menus Section dengan sudut melengkung
+                      const SizedBox(height: 24),
                       Container(
-                        height: 220, // Sesuaikan tinggi container
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: _filteredMenus.length,
-                          itemBuilder: (context, index) => Container(
-                            width: 150, // Sesuaikan lebar card
-                            margin: const EdgeInsets.only(right: 16),
-                            child: _buildMenuCard(_filteredMenus[index]),
-                          ),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.1),
+                              spreadRadius: 1,
+                              blurRadius: 10,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  'Popular Menus',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 24,
+                                    color: Color(0xFF28110A),
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const MenuEntryPage(),
+                                      ),
+                                    );
+                                  },
+                                  child: const Text('See All'),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 5,
+                                childAspectRatio: 0.7,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10,
+                              ),
+                              itemCount: 10,
+                              itemBuilder: (context, index) {
+                                if (index < _menuList.length) {
+                                  return _buildMenuCircle(_menuList[index]);
+                                }
+                                return const SizedBox.shrink();
+                              },
+                            ),
+                          ],
                         ),
                       ),
 
-                    const SizedBox(height: 20),
-                    Text(
-                      'Restaurant Results',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    if (_filteredRestos.isEmpty)
-                      const Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: Text('No restaurants found'),
-                      )
-                    else
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: _filteredRestos.length,
-                        itemBuilder: (context, index) => _buildRestoCard(_filteredRestos[index]),
+                      // Recommended Restaurants Section dengan sudut melengkung
+                      const SizedBox(height: 24),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.1),
+                              spreadRadius: 1,
+                              blurRadius: 10,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  'Recommended Restaurants',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 24,
+                                    color: Color(0xFF28110A),
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const RestoEntryPage(),
+                                      ),
+                                    );
+                                  },
+                                  child: const Text('See All'),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: _restoList.take(3).length,
+                              itemBuilder: (context, index) => _buildRestoCard(_restoList[index]),
+                            ),
+                          ],
+                        ),
                       ),
-                  ] else ...[
-                    // Regular Content
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Popular Menus',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24,
-                            color: Color(0xFF28110A), 
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const MenuEntryPage(),
-                              ),
-                            );
-                          },
-                          child: const Text('See All'),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16), // Tambahan jarak di sini
-                    // Grid layout for menu items (5x2)
-                    GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 5,
-                        childAspectRatio: 0.7,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                      ),
-                      itemCount: 10,
-                      itemBuilder: (context, index) {
-                        if (index < _menuList.length) {
-                          return _buildMenuCircle(_menuList[index]);
-                        }
-                        return const SizedBox.shrink();
-                      },
-                    ),
-
-                    const SizedBox(height: 35), // Jarak yang lebih besar
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Recommended Restaurants',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24,
-                            color: Color(0xFF28110A), 
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const RestoEntryPage(),
-                              ),
-                            );
-                          },
-                          child: const Text('See All'),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16), // Tambahan jarak yang sama
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: _restoList.take(3).length,
-                      itemBuilder: (context, index) => _buildRestoCard(_restoList[index]),
-                    ),
+                    ],
                   ],
-                ],
+                ),
               ),
             ),
           ],

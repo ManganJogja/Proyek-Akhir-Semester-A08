@@ -3,10 +3,17 @@ import 'package:mangan_jogja/models/resto_entry.dart';
 import 'package:mangan_jogja/reserve/screens/reservation_form.dart';
 import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
-import 'package:mangan_jogja/wishlist/models/wishlist_entry.dart'; // Import WishlistEntry
-import 'package:mangan_jogja/wishlist/providers/wishlist_provider.dart'; // Import WishlistProvider
-import 'package:mangan_jogja/review/screens/review_page.dart'; // Import ReviewPage
-import 'package:mangan_jogja/review/screens/review_page.dart'; // Import ReviewPage
+import 'package:mangan_jogja/wishlist/models/wishlist_entry.dart';
+import 'package:mangan_jogja/wishlist/providers/wishlist_provider.dart';
+import 'package:mangan_jogja/review/screens/review_page.dart';
+// Import pages for navigation
+import 'package:mangan_jogja/menu.dart';
+import 'package:mangan_jogja/ordertakeaway/ordertakeaway_page.dart';
+import 'package:mangan_jogja/reserve/screens/login.dart';
+import 'package:mangan_jogja/reserve/screens/logout.dart';
+import 'package:mangan_jogja/reserve/screens/reservepage.dart';
+import 'package:mangan_jogja/wishlist/screens/wishlist_page.dart';
+import 'package:mangan_jogja/widgets/bottom_navbar.dart';
 
 class RestoEntryPage extends StatefulWidget {
   const RestoEntryPage({super.key});
@@ -16,6 +23,8 @@ class RestoEntryPage extends StatefulWidget {
 }
 
 class _RestoEntryPageState extends State<RestoEntryPage> {
+  int _currentIndex = 0;
+  
   Future<List<RestoEntry>> fetchResto(CookieRequest request) async {
     final response = await request.get('http://127.0.0.1:8000/admin-dashboard/json2/');
     var data = response;
@@ -33,6 +42,7 @@ class _RestoEntryPageState extends State<RestoEntryPage> {
     final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color(0xFFDAC0A3),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -75,10 +85,52 @@ class _RestoEntryPageState extends State<RestoEntryPage> {
           }
         },
       ),
+      bottomNavigationBar: BottomNav(
+        currentIndex: _currentIndex,
+        onItemTapped: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+          if (index == 4) {
+            // Logout logic
+            _performLogout();
+          } else {
+            // Navigate to the corresponding page
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) {
+                switch (index) {
+                  case 0:
+                    return const MyHomePage();
+                  case 1:
+                    return const WishlistPage();
+                  case 2:
+                    return const ReservedRestaurantsPage();
+                  case 3:
+                    return const OrderTakeawayPage();
+                  default:
+                    return const LoginApp();
+                }
+              }),
+            );
+          }
+        },
+      ),
     );
+  }
+
+  Future<void> _performLogout() async {
+    bool success = await LogoutHandler.logoutUser(context);
+    if (success) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginApp()),
+      );
+    }
   }
 }
 
+// Rest of the RestoCard class remains the same
 class RestoCard extends StatelessWidget {
   final RestoEntry restoEntry;
 
@@ -86,7 +138,7 @@ class RestoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final wishlistProvider = Provider.of<WishlistProvider>(context); // Ambil instance WishlistProvider
+    final wishlistProvider = Provider.of<WishlistProvider>(context);
 
     return Card(
       elevation: 4,
@@ -118,20 +170,17 @@ class RestoCard extends StatelessWidget {
 
                 const SizedBox(height: 16),
 
-                // Tombol Aksi
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Tombol "Click to see reviews" di kiri
                     TextButton(
                       onPressed: () {
-                        // Navigasi ke halaman ReviewPage dengan data restoran
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => ReviewPage(
                               restaurantName: restoEntry.fields.namaResto,
-                              restaurantId: restoEntry.pk, // Gunakan Primary Key untuk ID restoran
+                              restaurantId: restoEntry.pk,
                             ),
                           ),
                         );
@@ -140,27 +189,24 @@ class RestoCard extends StatelessWidget {
                         'Click to see reviews',
                         style: TextStyle(
                           color: Colors.brown,
-                          decoration: TextDecoration.underline, // Garis bawah
+                          decoration: TextDecoration.underline,
                         ),
                       ),
                     ),
-                    // Tombol "Make Reservation" di kanan
                     ElevatedButton(
                       onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => ReservationPageForm(
-                              
-                              restoId: restoEntry.pk, 
-                              // Pass the restaurant ID
+                              restoId: restoEntry.pk,
                             ),
                           ),
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF4E342E), // Warna cokelat gelap
-                        foregroundColor: Colors.white, // Warna teks putih
+                        backgroundColor: const Color(0xFF4E342E),
+                        foregroundColor: Colors.white,
                       ),
                       child: const Text('Make Reservation'),
                     ),
@@ -170,7 +216,6 @@ class RestoCard extends StatelessWidget {
             ),
           ),
 
-          // Wishlist IconButton di kanan atas
           Positioned(
             top: 8,
             right: 8,
