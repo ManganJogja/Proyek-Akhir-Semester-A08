@@ -23,34 +23,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _currentIndex = 0;
-  final List<Widget> _pages = [
-    const MyHomePage(), // Home
-    const WishlistPage(), // Wishlist
-    const ReservedRestaurantsPage(), // Reservation
-    const OrderTakeawayPage(), // Orders
-    const LoginApp(), // Logout
-  ];
 
-  void _onItemTapped(int index) {
-    if (index == 4) {
-      // Logout logic
-      _performLogout();
-    } else {
-      // Navigasi ke halaman yang sesuai
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => _pages[index]),
-      );
-    }
-  }
-
-  Future<void> _performLogout() async {
-    bool success = await LogoutHandler.logoutUser(context);
-    if (success) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const LoginApp()),
-      );
-    }
-  }
   String _searchQuery = '';
   List<MenuEntry> _menuList = [];
   List<RestoEntry> _restoList = [];
@@ -351,9 +324,16 @@ class _MyHomePageState extends State<MyHomePage> {
       bottomNavigationBar: BottomNav(
         currentIndex: _currentIndex,
         onItemTapped: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) {
+              if (index == 0) return const MyHomePage();
+              if (index == 1) return const WishlistPage();
+              if (index == 2) return const ReservedRestaurantsPage();
+              if (index == 3) return const OrderTakeawayPage();
+              return const LoginApp();
+            }),
+          );
         },
       ),
     );

@@ -101,11 +101,11 @@ class BottomNav extends StatelessWidget {
         type: BottomNavigationBarType.fixed,
         selectedItemColor: const Color(0xFF8b6c5c),
         unselectedItemColor: Colors.grey,
-        selectedIconTheme: IconThemeData(
-          color: const Color(0xFF8b6c5c),
+        selectedIconTheme: const IconThemeData(
+          color: Color(0xFF8b6c5c),
           size: 30,
         ),
-        unselectedIconTheme: IconThemeData(
+        unselectedIconTheme: const IconThemeData(
           color: Colors.grey,
           size: 24,
         ),
