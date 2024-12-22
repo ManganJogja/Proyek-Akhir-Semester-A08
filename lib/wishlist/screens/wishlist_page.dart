@@ -203,6 +203,24 @@ class _WishlistPageState extends State<WishlistPage> {
                                         MaterialPageRoute(
                                           builder: (context) => EditWishlistPage(
                                             restaurantId: item.fields.restaurant,
+                                            currentDatePlan: null,
+                                            currentNote: '',
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: const Text(
+                                      'Add Plan',
+                                      style: TextStyle(color: Colors.green),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => EditWishlistPage(
+                                            restaurantId: item.fields.restaurant,
                                             currentDatePlan: item.fields.datePlan,
                                             currentNote: item.fields.additionalNote,
                                           ),
@@ -210,7 +228,7 @@ class _WishlistPageState extends State<WishlistPage> {
                                       );
                                     },
                                     child: const Text(
-                                      'Add/Edit Plan',
+                                      'Edit Plan',
                                       style: TextStyle(color: Colors.blue),
                                     ),
                                   ),
