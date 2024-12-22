@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 class LogoutHandler {
   static Future<bool> logoutUser(BuildContext context) async {
-    const String logoutUrl = "http://127.0.0.1:8000/auth/logout/"; 
+    const String logoutUrl = "http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/auth/logout/"; 
 
     try {
       final response = await http.post(
