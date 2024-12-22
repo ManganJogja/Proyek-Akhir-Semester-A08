@@ -34,7 +34,7 @@ class _StartPageState extends State<StartPage> {
                 children: [
                   Image.asset(
                     'assets/images/Logo.png',
-                    height: 40.0,
+                    height: 50.0,
                   ),
                   const SizedBox(width: 8.0),
                   Text(
@@ -88,8 +88,8 @@ class _StartPageState extends State<StartPage> {
                       Center(
                         child: Image.asset(
                           'assets/images/Logo.png',
-                          width: 200,
-                          height: 200,
+                          width: 300,
+                          height: 250,
                         ),
                       ),
                       Positioned(
