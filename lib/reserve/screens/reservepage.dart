@@ -189,7 +189,7 @@ Widget build(BuildContext context) {
                   padding: const EdgeInsets.all(16.0),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    childAspectRatio: 4 / 5,
+                    childAspectRatio: 0.65,
                     crossAxisSpacing: 16.0,
                     mainAxisSpacing: 16.0,
                   ),
