@@ -59,7 +59,7 @@ class _ReservedRestaurantsPageState extends State<ReservedRestaurantsPage> {
   List<String> restoOptions = []; 
 
   Future<List<ReserveEntry>> fetchReserve(CookieRequest request) async {
-    final response = await request.get('http://.0.0.1:8000/reserve/json/');
+    final response = await request.get('http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/reserve/json/');
     final restoResponse = await request.get('http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/admin-dashboard/json2/');
     
     List<RestoEntry> restoList = restoResponse.map<RestoEntry>((d) => RestoEntry.fromJson(d)).toList();
@@ -218,7 +218,7 @@ Widget build(BuildContext context) {
                               child: Text(
                                 entry.fields.resto,
                                 style: GoogleFonts.abhayaLibre(
-                                  fontSize: 15.0,
+                                  fontSize: 18.0,
                                   fontWeight: FontWeight.bold,
                                   color: const Color.fromARGB(
                                       255, 255, 255, 255),
@@ -246,7 +246,7 @@ Widget build(BuildContext context) {
                           InfoRow(
                               icon: Icons.note,
                               text: entry.fields.notes ?? '-'),
-                          const Spacer(),
+                          const SizedBox(height: 8),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
