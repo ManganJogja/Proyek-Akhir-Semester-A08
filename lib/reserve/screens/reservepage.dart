@@ -59,8 +59,8 @@ class _ReservedRestaurantsPageState extends State<ReservedRestaurantsPage> {
   List<String> restoOptions = []; 
 
   Future<List<ReserveEntry>> fetchReserve(CookieRequest request) async {
-    final response = await request.get('http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/reserve/json/');
-    final restoResponse = await request.get('http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/admin-dashboard/json2/');
+    final response = await request.get('http://127.0.0.1:8000/reserve/json/');
+    final restoResponse = await request.get('http://127.0.0.1:8000/admin-dashboard/json2/');
     
     List<RestoEntry> restoList = restoResponse.map<RestoEntry>((d) => RestoEntry.fromJson(d)).toList();
     Map<String, String> restoMap = {
@@ -189,7 +189,7 @@ Widget build(BuildContext context) {
                   padding: const EdgeInsets.all(16.0),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    childAspectRatio: 0.65,
+                    childAspectRatio: 0.4,
                     crossAxisSpacing: 16.0,
                     mainAxisSpacing: 16.0,
                   ),
@@ -218,7 +218,7 @@ Widget build(BuildContext context) {
                               child: Text(
                                 entry.fields.resto,
                                 style: GoogleFonts.abhayaLibre(
-                                  fontSize: 18.0,
+                                  fontSize: 15.0,
                                   fontWeight: FontWeight.bold,
                                   color: const Color.fromARGB(
                                       255, 255, 255, 255),
@@ -246,7 +246,7 @@ Widget build(BuildContext context) {
                           InfoRow(
                               icon: Icons.note,
                               text: entry.fields.notes ?? '-'),
-                          const SizedBox(height: 8),
+                          const Spacer(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -279,7 +279,7 @@ Widget build(BuildContext context) {
                                   final request = context.read<CookieRequest>();
                                   try {
                                     final response = await request.postJson(
-                                    "http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/reserve/delete-flutter/",
+                                    "http://127.0.0.1:8000/reserve/delete-flutter/",
                                     jsonEncode(<String, String>{
                                       'pk': entry.pk.toString(),
                                     })
