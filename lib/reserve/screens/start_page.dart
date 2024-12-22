@@ -89,7 +89,7 @@ class _StartPageState extends State<StartPage> {
                         child: Image.asset(
                           'assets/images/Logo.png',
                           width: 300,
-                          height: 250,
+                          height: 251,
                         ),
                       ),
                       Positioned(
