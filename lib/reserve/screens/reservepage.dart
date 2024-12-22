@@ -59,8 +59,8 @@ class _ReservedRestaurantsPageState extends State<ReservedRestaurantsPage> {
   List<String> restoOptions = []; 
 
   Future<List<ReserveEntry>> fetchReserve(CookieRequest request) async {
-    final response = await request.get('http://127.0.0.1:8000/reserve/json/');
-    final restoResponse = await request.get('http://127.0.0.1:8000/admin-dashboard/json2/');
+    final response = await request.get('http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/reserve/json/');
+    final restoResponse = await request.get('http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/admin-dashboard/json2/');
     
     List<RestoEntry> restoList = restoResponse.map<RestoEntry>((d) => RestoEntry.fromJson(d)).toList();
     Map<String, String> restoMap = {
@@ -279,7 +279,7 @@ Widget build(BuildContext context) {
                                   final request = context.read<CookieRequest>();
                                   try {
                                     final response = await request.postJson(
-                                    "http://127.0.0.1:8000/reserve/delete-flutter/",
+                                    "http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/reserve/delete-flutter/",
                                     jsonEncode(<String, String>{
                                       'pk': entry.pk.toString(),
                                     })

@@ -34,7 +34,7 @@ class _ReviewPageState extends State<ReviewPage> {
   Future<void> fetchReviews(CookieRequest request) async {
     try {
       final response = await request.get(
-        'http://127.0.0.1:8000/reviews/reviews/json/${widget.restaurantId}/',
+        'http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/reviews/reviews/json/${widget.restaurantId}/',
       );
 
       if (response != null && response['reviews'] != null) {
@@ -63,7 +63,7 @@ class _ReviewPageState extends State<ReviewPage> {
       CookieRequest request, int reviewId) async {
     try {
       final response = await request.post(
-        'http://127.0.0.1:8000/reviews/delete_review_flutter/$reviewId/',
+        'http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/reviews/delete_review_flutter/$reviewId/',
         {},
       );
 
@@ -81,7 +81,7 @@ class _ReviewPageState extends State<ReviewPage> {
       int rating, String comment) async {
     try {
       final response = await request.post(
-        'http://127.0.0.1:8000/reviews/add_review_flutter/$restaurantId/',
+        'http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/reviews/add_review_flutter/$restaurantId/',
         {
           'rating': rating.toString(),
           'comment': comment,
@@ -185,7 +185,7 @@ class _ReviewPageState extends State<ReviewPage> {
 
                     try {
                       final response = await request.post(
-                        'http://127.0.0.1:8000/reviews/edit_review_flutter/${review.id}/',
+                        'http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/reviews/edit_review_flutter/${review.id}/',
                         {
                           'rating': selectedRating.toString(),
                           'comment': reviewController.text,

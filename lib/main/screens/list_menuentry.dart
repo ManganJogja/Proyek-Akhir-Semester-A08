@@ -49,7 +49,7 @@ class _MenuEntryPageState extends State<MenuEntryPage> {
     }
   }
   Future<List<MenuEntry>> fetchMenu(CookieRequest request) async {
-    final response = await request.get('http://127.0.0.1:8000/admin-dashboard/json/');
+    final response = await request.get('http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/admin-dashboard/json/');
     var data = response;
     
     List<MenuEntry> listMenu = [];

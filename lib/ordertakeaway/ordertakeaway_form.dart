@@ -26,7 +26,7 @@ class _OrderTakeawayFormState extends State<OrderTakeawayForm> {
 
   Future<void> fetchMenus() async {
     final request = context.read<CookieRequest>();
-    final response = await request.get('http://127.0.0.1:8000/order-takeaway/api/menus/');
+    final response = await request.get('http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/order-takeaway/api/menus/');
     setState(() {
       menus = response;
     });
@@ -35,7 +35,7 @@ class _OrderTakeawayFormState extends State<OrderTakeawayForm> {
   Future<void> fetchRestaurants(String menuId) async {
     final request = context.read<CookieRequest>();
     final response = await request.get(
-      'http://127.0.0.1:8000/order-takeaway/api/restaurants/$menuId/',
+      'http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/order-takeaway/api/restaurants/$menuId/',
     );
     setState(() {
       restaurants = response;
@@ -64,7 +64,7 @@ class _OrderTakeawayFormState extends State<OrderTakeawayForm> {
 
   try {
     final response = await request.postJson(
-      'http://127.0.0.1:8000/order-takeaway/api/order/create/',
+      'http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/order-takeaway/api/order/create/',
       body,
     );
     print('Response: $response'); // Debug log

@@ -26,7 +26,7 @@ class _RestoEntryPageState extends State<RestoEntryPage> {
   int _currentIndex = 0;
   
   Future<List<RestoEntry>> fetchResto(CookieRequest request) async {
-    final response = await request.get('http://127.0.0.1:8000/admin-dashboard/json2/');
+    final response = await request.get('http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/admin-dashboard/json2/');
     var data = response;
     List<RestoEntry> listResto = [];
     for (var d in data) {

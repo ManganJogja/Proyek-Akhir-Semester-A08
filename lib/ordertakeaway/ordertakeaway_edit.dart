@@ -24,7 +24,7 @@ class _OrderTakeawayEditState extends State<OrderTakeawayEdit> {
   Future<void> fetchMenus(CookieRequest request) async {
     try {
       final response =
-          await request.get('http://127.0.0.1:8000/order-takeaway/api/menus/');
+          await request.get('http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/order-takeaway/api/menus/');
       setState(() {
         _menus = response is List ? response : [];
       });
@@ -36,7 +36,7 @@ class _OrderTakeawayEditState extends State<OrderTakeawayEdit> {
   Future<void> fetchRestaurants(CookieRequest request, String menuId) async {
     try {
       final response = await request.get(
-          'http://127.0.0.1:8000/order-takeaway/api/restaurants/$menuId/');
+          'http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/order-takeaway/api/restaurants/$menuId/');
       setState(() {
         _restaurants = response is List ? response : [];
       });
@@ -48,7 +48,7 @@ class _OrderTakeawayEditState extends State<OrderTakeawayEdit> {
   Future<void> fetchOrderDetails(CookieRequest request) async {
     try {
       final response = await request.get(
-          'http://127.0.0.1:8000/order-takeaway/json/${widget.orderId}/');
+          'http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/order-takeaway/json/${widget.orderId}/');
 
       final List<dynamic> dataList =
           response is String ? jsonDecode(response) : response;
@@ -88,7 +88,7 @@ class _OrderTakeawayEditState extends State<OrderTakeawayEdit> {
 
       try {
         final response = await request.postJson(
-          'http://127.0.0.1:8000/order-takeaway/api/order/edit/${widget.orderId}/',
+          'http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/order-takeaway/api/order/edit/${widget.orderId}/',
           body,
         );
 

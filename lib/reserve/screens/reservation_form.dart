@@ -175,7 +175,7 @@ class _ReservationPageState extends State<ReservationPageForm> {
                             setState(() => _isLoading = true);
                             try {
                               final response = await request.postJson(
-                                "http://127.0.0.1:8000/reserve/reserve-flutter/${widget.restoId}/",
+                                "http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/reserve/reserve-flutter/${widget.restoId}/",
                                 jsonEncode({
                                   'name': _name,
                                   'date': _date,

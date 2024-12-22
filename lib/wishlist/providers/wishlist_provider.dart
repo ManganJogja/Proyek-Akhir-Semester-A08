@@ -11,7 +11,7 @@ class WishlistProvider extends ChangeNotifier {
   
   Future<void> fetchWishlist(CookieRequest request) async {
     try {
-      final response = await request.get('http://127.0.0.1:8000/wishlist/json/');
+      final response = await request.get('http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/wishlist/json/');
       
       
       if (response is List) {
@@ -32,7 +32,7 @@ class WishlistProvider extends ChangeNotifier {
   Future<bool> toggleWishlist(CookieRequest request, String restaurantId) async {
     try {
       final response = await request.post(
-        'http://127.0.0.1:8000/wishlist/toggle/$restaurantId/',
+        'http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/wishlist/toggle/$restaurantId/',
         {},
       );
       
@@ -57,7 +57,7 @@ class WishlistProvider extends ChangeNotifier {
 
       // Kirim data sesuai dengan format yang diharapkan oleh Django WishlistForm
       final response = await request.post(
-        'http://127.0.0.1:8000/wishlist/add/$restaurantId/',
+        'http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/wishlist/add/$restaurantId/',
         {
           'date_plan': DateFormat('yyyy-MM-dd').format(datePlan), // Format tanggal sesuai dengan Django
           'additional_note': additionalNote,
@@ -96,7 +96,7 @@ class WishlistProvider extends ChangeNotifier {
       print('Additional Note: $additionalNote');
 
       final response = await request.post(
-        'http://127.0.0.1:8000/wishlist/edit/$restaurantId/',
+        'http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/wishlist/edit/$restaurantId/',
         {
           'date_plan': DateFormat('yyyy-MM-dd').format(datePlan),
           'additional_note': additionalNote,
@@ -123,7 +123,7 @@ class WishlistProvider extends ChangeNotifier {
       print('Restaurant ID: $restaurantId');
 
       final response = await request.post(
-        'http://127.0.0.1:8000/wishlist/delete/$restaurantId/',
+        'http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/wishlist/delete/$restaurantId/',
         {},
       );
       

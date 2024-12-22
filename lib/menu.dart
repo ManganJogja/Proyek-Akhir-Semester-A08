@@ -40,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _fetchData() async {
     final request = context.read<CookieRequest>();
     try {
-      final menuResponse = await request.get('http://127.0.0.1:8000/admin-dashboard/json/');
+      final menuResponse = await request.get('http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/admin-dashboard/json/');
       List<MenuEntry> menus = [];
       for (var d in menuResponse) {
         if (d != null) {
@@ -48,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
         }
       }
 
-      final restoResponse = await request.get('http://127.0.0.1:8000/admin-dashboard/json2/');
+      final restoResponse = await request.get('http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/admin-dashboard/json2/');
       List<RestoEntry> restos = [];
       for (var d in restoResponse) {
         if (d != null) {

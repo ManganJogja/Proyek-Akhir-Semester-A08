@@ -77,7 +77,7 @@ Future<void> _fetchReservationDetails(CookieRequest request) async {
 
   try {
     final dynamic data = await request.get(
-      'http://127.0.0.1:8000/reserve/json/${widget.reservationId}/',
+      'http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/reserve/json/${widget.reservationId}/',
     );
     // Django returns a list with one item, so we need to access the first item's fields
     if (data != null && data is List && data.isNotEmpty) {
@@ -129,7 +129,7 @@ Future<void> _updateReservation(CookieRequest request) async {
 
   try {
     final response = await request.post(
-      'http://127.0.0.1:8000/reserve/edit-flutter/${widget.reservationId}/',
+      'http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/reserve/edit-flutter/${widget.reservationId}/',
       jsonEncode(postData),  
       
     );

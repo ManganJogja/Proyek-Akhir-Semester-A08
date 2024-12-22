@@ -29,7 +29,7 @@ class _MenuDetailPageState extends State<MenuDetailPage> {
   Future<void> fetchRestaurants() async {
     final request = context.read<CookieRequest>();
     try {
-      final response = await request.get('http://127.0.0.1:8000/admin-dashboard/json2/');
+      final response = await request.get('http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/admin-dashboard/json2/');
       var data = response;
       List<RestoEntry> allRestos = [];
       for (var d in data) {

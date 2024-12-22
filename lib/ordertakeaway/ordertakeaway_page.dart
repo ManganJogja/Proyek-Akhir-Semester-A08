@@ -62,7 +62,7 @@ class _OrderTakeawayPageState extends State<OrderTakeawayPage> {
   Future<List<dynamic>> fetchOrders(CookieRequest request) async {
   try {
     final timestamp = DateTime.now().millisecondsSinceEpoch; // Add a unique timestamp
-    final response = await request.get('http://127.0.0.1:8000/order-takeaway/json/?t=$timestamp');
+    final response = await request.get('http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/order-takeaway/json/?t=$timestamp');
     if (response is List) {
       return _sortOrders(response);
     } else if (response is String) {
@@ -98,7 +98,7 @@ class _OrderTakeawayPageState extends State<OrderTakeawayPage> {
   Future<void> deleteOrder(CookieRequest request, String orderId) async {
     try {
       final response = await request.post(
-        'http://127.0.0.1:8000/order-takeaway/api/order/delete/$orderId/',
+        'http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id/order-takeaway/api/order/delete/$orderId/',
         {},
       );
 
