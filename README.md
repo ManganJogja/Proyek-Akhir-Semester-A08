@@ -39,3 +39,4 @@ Link deployment: http://raysha-reifika-manganjogja.pbp.cs.ui.ac.id
 
 Membuat fungsi baru untuk menerima request dari aplikasi mobile menggunakan metode GET dan POST. Pada aplikasi mobile berbasis Flutter, menambahkan request ke URL fungsi tersebut serta memproses data yang diterima dari hasil request. Web service Django akan memberikan respon dalam format JSON. Melakukan debugging dan memperbaiki kesalahan atau masalah yang ditemukan hingga aplikasi berfungsi dengan baik sesuai dengan persyaratan yang diharapkan.
 
+[![Build status](https://build.appcenter.ms/v0.1/apps/08c7b47a-1a1f-4168-9fca-f2802ae24381/branches/main/badge)](https://appcenter.ms)

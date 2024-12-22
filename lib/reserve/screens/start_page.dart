@@ -55,116 +55,99 @@ class _StartPageState extends State<StartPage> {
       ),
       body: Center(
         child: SingleChildScrollView(
-        child: Container(
-          width: double.infinity,
-          height: MediaQuery.of(context).size.height,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Ensure the Stack has a size constraint
-              Container(
-                width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.5, // Adjusted height to prevent "no size" error
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Positioned(
-                      top: -60,
-                      left: -20,
-                      child: Image.asset(
-                        'assets/images/megabendung2.png',
-                        width: 170,
-                        height: 250,
+          child: Container(
+            width: double.infinity,
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Positioned(
+                        top: 0, // Sesuaikan posisi vertikal
+                        left: 50, // Geser lebih ke dalam
+                        child: Image.asset(
+                          'assets/images/megabendung1.png',
+                          width: 100, // Kecilkan ukuran
+                          height: 100, // Sesuaikan tinggi
+                        ),
                       ),
-                    ),
-                    Positioned(
-                      top: 30,
-                      right: -10,
-                      child: Image.asset(
-                        'assets/images/megabendung1.png',
-                        width: 120,
-                        height: 100,
+                      Positioned(
+                        top: 0,
+                        right: 50, // Geser lebih ke dalam
+                        child: Image.asset(
+                          'assets/images/megabendung1.png',
+                          width: 100,
+                          height: 100,
+                        ),
                       ),
-                    ),
-                    Positioned(
-                      top: -20,
-                      left: 135,
-                      child: Image.asset(
-                        'assets/images/Logo.png',
-                        width: 350,
-                        height: 350,
+                      Center(
+                        child: Image.asset(
+                          'assets/images/Logo.png',
+                          width: 200,
+                          height: 200,
+                        ),
                       ),
-                    ),
-
-                    Positioned(
-                      top: 200,
-                      left: -10,
-                      child: Image.asset(
-                        'assets/images/megabendung1.png',
-                        width: 120,
-                        height: 100,
+                      Positioned(
+                        bottom: 0, // Sesuaikan posisi vertikal
+                        left: 50, // Geser lebih ke dalam
+                        child: Image.asset(
+                          'assets/images/megabendung2.png',
+                          width: 100,
+                          height: 100,
+                        ),
                       ),
-                    ),
-                    Positioned(
-                      bottom: -65,
-                      right: -25,
-                      child: Image.asset(
-                        'assets/images/megabendung2.png',
-                        width: 170,
-                        height: 250,
+                      Positioned(
+                        bottom: 0,
+                        right: 50, // Geser lebih ke dalam
+                        child: Image.asset(
+                          'assets/images/megabendung2.png',
+                          width: 100,
+                          height: 100,
+                        ),
                       ),
-                    ),
-                    
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'Hello, welcome!',
-                style: GoogleFonts.aDLaMDisplay(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: const Color(0xFF3E190E),
-                ),
-              ),
-              const SizedBox(height: 8),
-              Container(
-                width: double.infinity, 
-                height: 80,
-                padding: const EdgeInsets.all(12.0), // Padding di dalam kotak
-                decoration: const BoxDecoration(
-                  color: const Color(0xFF3E190E), // Warna coklat tua
-                ),
-                child: Text(
-                  'Mangan Jogja\nWhere Every Meal is a Journey!',
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.abhayaLibre(
-                    fontSize: 20,
-                    color: const Color(0xFFE7DBC6), // Warna teks putih atau cerah
+                    ],
                   ),
                 ),
-              ),
-              const SizedBox(height: 24),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                child: MouseRegion(
-                  onEnter: (_) {
-                    setState(() {
-                      _loginColor = const Color(0xFFAD8262);
-                    });
-                  },
-                  onExit: (_) {
-                    setState(() {
-                      _loginColor = const Color(0xFFDAC0A3);
-                    });
-                  },
+
+                const SizedBox(height: 16),
+                Text(
+                  'Hello, welcome!',
+                  style: GoogleFonts.aDLaMDisplay(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0xFF3E190E),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  width: double.infinity,
+                  height: 80,
+                  padding: const EdgeInsets.all(12.0),
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF3E190E),
+                  ),
+                  child: Text(
+                    'Mangan Jogja\nWhere Every Meal is a Journey!',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.abhayaLibre(
+                      fontSize: 20,
+                      color: const Color(0xFFE7DBC6),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40.0),
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const LoginPage(),
-                        ),
+                        MaterialPageRoute(builder: (context) => const LoginPage()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -185,28 +168,14 @@ class _StartPageState extends State<StartPage> {
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                child: MouseRegion(
-                  onEnter: (_) {
-                    setState(() {
-                      _registerColor = const Color(0xFFAD8262);
-                    });
-                  },
-                  onExit: (_) {
-                    setState(() {
-                      _registerColor = const Color(0xFFDAC0A3);
-                    });
-                  },
+                const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40.0),
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const RegisterPage(),
-                        ),
+                        MaterialPageRoute(builder: (context) => const RegisterPage()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -225,25 +194,22 @@ class _StartPageState extends State<StartPage> {
                         color: Colors.black,
                       ),
                     ),
-                    
                   ),
                 ),
-              ),
-              const SizedBox(height: 50),
-              Text(
-                'ManganJogja.  © 2024, PBP-A (A08)',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.aBeeZee(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w500,
-                  color: const Color(0xFF3E190E), // Warna teks sesuai tema
+                const SizedBox(height: 50),
+                Text(
+                  'ManganJogja.  © 2024, PBP-A (A08)',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.aBeeZee(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                    color: const Color(0xFF3E190E),
+                  ),
                 ),
-              ),
-
-            ],
+              ],
+            ),
           ),
         ),
-      ),
       ),
     );
   }
